@@ -1,0 +1,376 @@
+
+
+html, body { margin: 0; padding: 0; font-family: sans-serif; }
+
+ul{
+  padding: 3%;
+
+}
+
+li {
+  list-style-type: none;
+  opacity: 100%;
+  background-color: #233044;
+  color: #fdffb7;
+  font-size: 20%;
+  padding: 2%;
+  font-family: sans-serif;
+}
+
+#map { 
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+#toolbar { 
+	width: 96%;
+	height: 3%;
+  padding: 2%;
+	background-color: #233044;
+  position: relative;
+  opacity: .9;
+  display: flex;
+}
+  h1 {
+    width: 10%;
+    max-height: 40%;
+    color: #fdffb7;
+    font-size: 2em;
+  }  
+  #locationBox, #addLocationBox {
+    width: 75%;
+    height: 90%;
+    font-size: 1em;
+    position: relative;
+  }
+
+/* covers Find, Add, List, and show all buttons*/
+
+#tools{
+  background-color: #233044;
+  opacity: .9;
+  position: relative;
+  height: 10%;
+  width: 100%;
+  display: -webkit-flex;
+  display: flex;
+  color: #fdffb7;
+}
+  .button {
+    background-color: #233044;
+    color: #fdffb7;
+    font-size: 1em;
+    border: none;
+    text-align: center;
+    max-height: 95%;
+    width: 22%;
+    border-radius: 0.75em;
+    border: 1px solid #233044;
+    padding: 1em;
+  }
+    .button:hover{
+      background-color: #36455e;
+    }
+
+
+/* Covers Find Nearest, Draw Search area, Hide all, and List by Rating functions */
+
+#hiddenFiltersBar {
+  width: 98%;
+  height: 5%;
+  background-color: #36455e;
+  padding-bottom: 1%;
+  padding-left: 2%;
+  position: relative;
+  opacity: .9;
+  color: #fdffb7;
+  display: flex;
+  }
+    .filterButton {
+      background-color: #36455e;
+      color: #fdffb7;
+      font-size: 1em;
+      border: none;
+      text-align: center;
+      max-height: 95%;
+      width: 22%;
+    }
+      #ratingsFilterContainer {
+        width: 30%;
+        height: 65%;
+        background-color: #36455e;
+        padding-bottom: 1%;
+        padding-left: 1%;
+        padding-right: 0;
+        position: relative;
+        opacity: .9;
+        color: #fdffb7;
+        display: flex;
+        float: right;
+      }
+        #ratingsFilterList {
+          width: 80%;
+          height: 94%;
+          background-color: #233044;
+          padding-bottom: 5%;
+          padding-right: 1%;
+          position: relative;
+          opacity: .9;
+          max-height: 100%;
+          overflow: auto;
+        }
+        #hiddenRatingsFilter {
+          width: 20%;
+          height: 95%;
+          background-color: #fdffb7;
+          padding-bottom: 1%;
+          padding-top: 2%;
+          padding-left: 2%;
+          position: relative;
+          opacity: .9;
+          color: #233044;
+          display: flex;
+          flex-direction: column;
+        }
+
+
+/* Covers add location search bar and form functions  */
+
+#hiddenAddLocationBox, #hiddenMessageBar{ 
+  width: 96%;
+  height: 5%;
+  background-color: #36455e;
+  position: relative;
+  opacity: .9;
+  padding: 2%;
+  }
+
+#addButton {
+  width: 5%;
+}
+  #hiddenAddForm { 
+    width: 30%;
+    height: 40%;
+    background-color: #233044;
+    padding-bottom: 1%;
+    position: relative;
+    opacity: .9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    color: #fdffb7;
+  }
+    #addReview, #revReview {
+      width: 90%;
+      height: 30%;
+      display: -webkit-flex;
+      display: flex;
+      font-size: 20px;
+    }
+    #reviewButtons{
+      height: 30%;
+      width: 95%;
+      padding-top: 8%;
+      display: -webkit-flex;
+      display: flex;
+      color: #fdffb7;
+      font-size: 20%;
+    }
+    .submitBarButton{
+      background-color: #fdffb7;
+      color: #233044;
+      font-size: 100%;
+      border-radius: 25px;
+      border: 1px solid #233044;
+      padding: 3%;
+      width: 100%;
+    }
+  
+
+
+/* Covers List functions showing all locations*/
+#hiddenLocationsList{ 
+  width: 20%;
+  height: 55%;
+  background-color: #233044;
+  padding-bottom: 5%;
+  padding-left: 2%;
+  position: relative;
+  opacity: .9;
+  float: right;
+  max-height: 100%;
+  overflow: auto;
+}
+
+
+/* Covers Location profile and rate/review form functions */ 
+
+#hiddenLocationProfile {
+  width: 30%;
+  height: 65%;
+  background-color: #233044;
+  margin: 0 auto;
+  position: absolute;
+  opacity: .90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1%;
+  padding-bottom: 3%;
+  color: #fdffb7;
+  overflow: auto;
+}
+  #profileReviews{ 
+    width: 90%;
+    height: 30%;
+    background-color: #233044;
+    position: relative;
+    display: table;
+    opacity: .9;
+    float: left;
+    overflow: auto;
+  }
+  #profileButtonsContainer {
+    width: 90%;
+    display: block;
+  }
+    #rateReviewButton, #moreInfoButton, #showDirectionsButton {
+      width: 30%;
+    }
+    /* Covers directions pop-up */
+      #directionsBox {
+          padding: 2%;
+          width: 90%;
+          height: 50%;
+          background-color: white;
+          position: relative;
+          opacity: .98;
+          float: left;
+          max-height: 100%;
+          font-size: 90%;
+      }
+      #hiddenReviewForm { 
+        width: 30%;
+        height: 40%;
+        background-color: #233044;
+        margin: 0 auto;
+        position: absolute;
+        opacity: .9;
+        top: 30%;
+        left: 40%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 3%;
+        padding-bottom: 1%;
+        color: #fdffb7;
+      }
+        .reviewbutton {
+          background-color: #233044;
+          color: #fdffb7;
+          font-size: 15px;
+          padding: 1%;
+          width: 20%;
+          border: none;
+        }
+        #hiddenSubmitFormButton {
+          width: 90%;
+          max-height: 60%;
+          background-color: #233044;
+          padding-top: 5%;
+          padding-left: 2%;
+          position: relative;
+          opacity: .9;
+          display: flex;
+          flex-direction: row;
+        }
+      #moreInfoContainer {
+        width: 50%;
+        height: 65%;
+        background-color: #233044;
+        margin: 0 auto;
+        position: absolute;
+        opacity: .98;
+        top: 25%;
+        left: 30%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 1%;
+        padding-bottom: 3%;
+        color: #fdffb7;
+        overflow: auto;
+      }
+        #profileImage {
+          max-width: 90%;
+        }
+        #hoursList{
+          padding-bottom: 2%;
+          width: 90%;
+          height: 40%;
+          background-color: #3a4659;
+          position: relative;
+          opacity: .9;
+          display: inline-table;
+          text-align: center;
+
+        }
+          #hour {
+            background-color: #3a4659;
+            font-size: 70%;
+            max-height: 95%;
+          }
+        #wikiInfo {
+          padding: 2%;
+          width: 90%;
+          height: 50%;
+          background-color: #3a4659;
+          position: relative;
+          opacity: .98;
+          float: left;
+          max-height: 100%;
+          font-size: 90%;
+        }
+        #wikiLinkButton {
+          width: 90%;
+          height: 20%;
+          background-color: #fdffb7;
+          color: #233044;
+        }
+
+
+
+/* Covers all bar buttons */ 
+
+.barButton{
+  background-color: #36455e;
+  color: #fdffb7;
+  font-size: 1em;
+  border-radius: 0.5em;
+  border: 1px solid #233044;
+  padding: 1em;
+  width: 100%;
+  height: 90%;
+  text-align: center;
+}
+
+
+/* Covers all close buttons */
+
+#findCloseButton, #listCloseButton, #profileCloseButton, #moreInfoCloseButton, #hideDirectionsBut {
+  height: 5%;
+  width: 90%;
+  padding-top: 2%;
+  padding-right: 2%;
+  padding-bottom: 2%;
+  padding-left: 1%;
+  background-color: #233044;
+  border: none;
+  float: right;
+  text-align: right;
+  display: block;
+}
+
