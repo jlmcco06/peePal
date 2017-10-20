@@ -1,628 +1,597 @@
 // Model defiend below viewModel due to length or entries
-    
-    var viewModel = {
-      createMarkers: function() {
-        placeInfo = new google.maps.InfoWindow();
-        //iterate over restrooms list to create markers
-        for (i = 0 ; i < model.restRooms.length; i += 1 ) {
-          pos = model.restRooms[i].location;
-          name = model.restRooms[i].title;
-          id = model.restRooms[i].id;
-          map = map;
-          icon = 'images/TP.png';
+var viewModel = {
+  createMarkers: function() {
+    placeInfo = new google.maps.InfoWindow();
+    //iterate over restrooms list to create markers
+    for (i = 0 ; i < model.restRooms.length; i += 1 ) {
+      pos = model.restRooms[i].location;
+      name = model.restRooms[i].title;
+      id = model.restRooms[i].id;
+      map = map;
+      icon = 'images/TP.png';
 
-          mark = new google.maps.Marker({
-            id: id,
-            position: pos,
-            map: map,
-            title: name,
-            animation: google.maps.Animation.DROP,
-            visible: false,
-            icon: icon,
-          });
+      mark = new google.maps.Marker({
+        id: id,
+        position: pos,
+        map: map,
+        title: name,
+        animation: google.maps.Animation.DROP,
+        visible: false,
+        icon: icon,
+      });
+      //add each mark to markers
+      model.markers.push(mark);
+      //attach info window function to each marker when clicked
+      mark.addListener('click', function() {
+      viewModel.addWindowInfo(this, placeInfo);
+      viewModel.displayLocationProfile(this.id);
+      this.setAnimation(google.maps.Animation.BOUNCE);
+      });
 
-          //add each mark to markers
-          model.markers.push(mark);
-          //attach info window function to each marker when clicked
-          mark.addListener('click', function() {
-          viewModel.addWindowInfo(this, placeInfo);
-          viewModel.displayLocationProfile(this.id);
-          this.setAnimation(google.maps.Animation.BOUNCE);
+    }//end of create markers loop
+  },
 
-          });
+  showAllMarkers: function(){
+    this.hideAllPopUps();
+    for (i = 0; i < model.markers.length; i += 1) {
+      model.markers[i].setVisible(true);
+    }
+    this.showHiddenBar(true);
+    },
+  
+  hideAllMarkers: function(){
+    this.showLocationProfile(false);
+    if (activeWindow) {
+      activeWindow.close();
+    }
+    directionsDisplay.setMap(null);
+    for (i = 0; i < model.markers.length; i += 1) {
+      model.markers[i].setVisible(false);
+      this.showHiddenBar(false);
+    }
+  },
 
-        }//end of create markers loop
-
-      },
-
-      showAllMarkers: function(){
-        this.hideAllPopUps();
-        for (i = 0; i < model.markers.length; i += 1) {
-          model.markers[i].setVisible(true);
-        }
-        this.showHiddenBar(true);
-      },
-      hideAllMarkers: function(){
-        this.showLocationProfile(false);
-        if (activeWindow) {
-          activeWindow.close();
-        }
-        directionsDisplay.setMap(null);
-        for (i = 0; i < model.markers.length; i += 1) {
-          model.markers[i].setVisible(false);
-          this.showHiddenBar(false);
-        }
-      },
-      showFindBox: ko.observable(false),
-      showHiddenBar: ko.observable(false),
-      showSubmitForm: ko.observable(false),
-      showAddBox: ko.observable(false),
-      showAddForm: ko.observable(false),
-      showLocationsList: ko.observable(false),
-      showAddedMessage: ko.observable(false),
-      showLocationProfile: ko.observable(false),
-      showReviewForm: ko.observable(false),
-      showDirections: ko.observable(false),
-      showFiltersBar: ko.observable(false),
-      showEraseCircle: ko.observable(false),
-      showRatingsFilter: ko.observable(false),
-      showMoreInfo: ko.observable(false),
-      profileName: ko.observable(),
-      profileAddress: ko.observable(),
-      profileHours: ko.observable(),
-      profileWiki: ko.observable(),
-      hoursArray : ko.observableArray(),
-      detailsImage : ko.observable(),
-      wikiLink : ko.observable(),
-
+  showFindBox: ko.observable(false),
+  showHiddenBar: ko.observable(false),
+  showSubmitForm: ko.observable(false),
+  showAddBox: ko.observable(false),
+  showAddForm: ko.observable(false),
+  showLocationsList: ko.observable(false),
+  showAddedMessage: ko.observable(false),
+  showLocationProfile: ko.observable(false),
+  showReviewForm: ko.observable(false),
+  showDirections: ko.observable(false),
+  showFiltersBar: ko.observable(false),
+  showEraseCircle: ko.observable(false),
+  showRatingsFilter: ko.observable(false),
+  showMoreInfo: ko.observable(false),
+  profileName: ko.observable(),
+  profileAddress: ko.observable(),
+  profileHours: ko.observable(),
+  profileWiki: ko.observable(),
+  hoursArray : ko.observableArray(),
+  detailsImage : ko.observable(),
+  wikiLink : ko.observable(),
       
-      displayFindBox: function(){
-        this.hideAllPopUps();
-        this.showFindBox(true);
-      },
+  displayFindBox: function(){
+    this.hideAllPopUps();
+    this.showFindBox(true);
+  },
 
-      displayAddBox: function(){
-        this.hideAllPopUps();
-        this.showAddBox(true);
-      },
+  displayAddBox: function(){
+    this.hideAllPopUps();
+    this.showAddBox(true);
+  },
 
-      displayFiltersBar: function() {
-        this.hideAllPopUps();
-        this.showFiltersBar(true);
-      },
+  displayFiltersBar: function() {
+    this.hideAllPopUps();
+    this.showFiltersBar(true);
+  },
 
-      hideAllPopUps: function(){
-        viewModel.showHiddenBar(false);
-        viewModel.showFindBox(false);
-        viewModel.showAddBox(false);
-        viewModel.showAddForm(false);
-        viewModel.showSubmitForm(false);
-        viewModel.showLocationsList(false);
-        viewModel.showAddedMessage(false);
-        viewModel.showReviewForm(false);
-        viewModel.showDirections(false);
-        directionsDisplay.setMap(null);
-        viewModel.showFiltersBar(false);
-        viewModel.showRatingsFilter(false);
-      },
+  hideAllPopUps: function(){
+    viewModel.showHiddenBar(false);
+    viewModel.showFindBox(false);
+    viewModel.showAddBox(false);
+    viewModel.showAddForm(false);
+    viewModel.showSubmitForm(false);
+    viewModel.showLocationsList(false);
+    viewModel.showAddedMessage(false);
+    viewModel.showReviewForm(false);
+    viewModel.showDirections(false);
+    directionsDisplay.setMap(null);
+    viewModel.showFiltersBar(false);
+    viewModel.showRatingsFilter(false);
+  },
 
-      findNearest: function(){
-
-        if (userLocation) {
-        origin = userLocation.getPosition();
-        var dests = [];
-        var distServ = new google.maps.DistanceMatrixService();
-        for (i = 0; i < model.markers.length; i += 1) {
-          dest = model.markers[i].getPosition();
-          dests.push(dest);
-          }
-        distServ.getDistanceMatrix(
+  findNearest: function(){
+    if (userLocation) {
+      origin = userLocation.getPosition();
+      var dests = [];
+      var distServ = new google.maps.DistanceMatrixService();
+      for (i = 0; i < model.markers.length; i += 1) {
+        dest = model.markers[i].getPosition();
+        dests.push(dest);
+      }
+      distServ.getDistanceMatrix(
         {
           origins: [origin],
           destinations: dests,
           travelMode: 'WALKING'
-          }, callback);
+        }, callback);
         
-        function callback(response, status) {
-          if (status == 'OK') {
-              markerDist = response.destinationAddresses;
-              matrixResponse = markerDist;
-              var currentDist;
-              var closest = response.rows[0].elements[0].distance.value;
-              for (i = 0; i < markerDist.length; i++) {
-                currentDist = response.rows[0].elements[i].distance.value;
-                if (closest >= currentDist) {
-                  closestLoc = model.markers[i];
-                  closest = currentDist;
-                  var closestId = model.markers[i].id;
-                  var closestPos = model.markers[i].getPosition();
-                }
+      function callback(response, status) {
+        if (status == 'OK') {
+          markerDist = response.destinationAddresses;
+          matrixResponse = markerDist;
+          var currentDist;
+          var closest = response.rows[0].elements[0].distance.value;
+          for (i = 0; i < markerDist.length; i++) {
+            currentDist = response.rows[0].elements[i].distance.value;
+              if (closest >= currentDist) {
+                closestLoc = model.markers[i];
+                closest = currentDist;
+                var closestId = model.markers[i].id;
+                var closestPos = model.markers[i].getPosition();
               }
-              viewModel.hideAllMarkers();
-              closestLoc.setVisible(true);
-              closestLoc.setAnimation(google.maps.Animation.BOUNCE);
-              viewModel.displayLocationProfile(closestId);
-              viewModel.displayDirections(userLocation,closestPos);
-          } else if (status == 'NOT_FOUND' || status == 'ZERO_RESULTS') {
+            }
+            viewModel.hideAllMarkers();
+            closestLoc.setVisible(true);
+            closestLoc.setAnimation(google.maps.Animation.BOUNCE);
+            viewModel.displayLocationProfile(closestId);
+            viewModel.displayDirections(userLocation,closestPos);
+        } else if (status == 'NOT_FOUND' || status == 'ZERO_RESULTS') {
             viewModel.showHiddenMessage('Nope', 'Unable to get directions for entered locations');
           }
         }
-      } else {
-          this.showHiddenMessage('Nope', 'Please enter your location into the search bar, or click the map to drop a pin.');
-        }
-      },
-
-      getDirections : function() {
-        current = this.findMarker(currentProfile.id).getPosition();
-        if (userLocation) {
-          this.displayDirections(userLocation, current);
-
-        } else {
-          this.showHiddenMessage('Nope', 'Please enter your location into the search bar, or click the map to drop a pin.');
-        }
-      },
-
-      showByRating : function(rating) {
-        //remove open circles/directions 
-        directionsDisplay.setMap(null);
-        if (circle) {
-          circle.setMap(null);
-        }
-
-        //choose ratings list div and set  it to blank
-        list = document.getElementById("ratingsFilterList");
-        list.innerHTML = '';
-        //iterate over restrooms and set locations 
-        for (i=0; i < model.restRooms.length; i += 1) {
-          //comapre average rating of locatino to rating choice
-          if (model.restRooms[i].avgRating >= rating) {
-            //set marker visibilty of location to true if location ranks at or higher than rating
-            viewModel.findMarker(model.restRooms[i].id).setVisible(true);
-            //add loction name to list if ranking it at or higer than chosen rating
-            idnum = model.restRooms[i].id;
-            btn = document.createElement("BUTTON");
-            txt = document.createTextNode(model.restRooms[i].title);
-            btn.appendChild(txt);
-            btn.setAttribute('id', idnum)
-            btn.setAttribute('style', 'width: 100%; background-color: #233044; color: #fdffb7; font-size: 20px; border: none; padding: 3%;');
-            list.appendChild(btn);
-            viewModel.addListListeners(idnum);
-          } else {
-            //set visibility to false if rating is below chasen rating 
-            viewModel.findMarker(model.restRooms[i].id).setVisible(false);
-          }
-         if (list.innerHTML === '') {
-          list.innerHTML = "No locations currently have that rating";
-         }
-        }
-        //set source of elements with id values less than chose rating to clearBrush,
-        // and at ot highger than rating to black Brush
-        document.getElementById(rating).src = "images/blackBrush.png";
-        for (i=5; i >= 1; i --) {
-          elem = document.getElementById(i);
-          if (elem.id >= rating) {
-            elem.src = "images/blackBrush.png";
-          } else {
-            elem.src = "images/clearBrush.png";
-          }
-        }
-
-
-      },
-
-      addWindowInfo : function (marker, placeInfo){
-        if (activeWindow) {
-          activeWindow.close();
-        }
-
-        placeInfo = new google.maps.InfoWindow();
-        placeInfo.close(map, marker);
-        //set all unclicked markers to null
-        for (i = 0; i < model.markers.length; i += 1) {
-          model.markers[i].setAnimation(null);
-        }
-
-        //check current marker to be sure it isn't alredy clicked
-        if (placeInfo.marker != marker) {
-          placeInfo.setMarker = null;
-          activeWindow = placeInfo;
-          //set marker content to current mark title
-          placeInfo.setContent('<div>' + marker.title + '</div>');
-          placeInfo.open(map, marker);
-          //remove info window in closed
-          placeInfo.addListener('closeclick', function(){
-          placeInfo.setMarker = null;
-          });
-          }
-      },
-
-      displayAddForm: function() {
-        if (addMarker) {
-        this.showAddForm(true);
-        this.showSubmitForm(true);
-      } else {
-        this.showHiddenMessage('Nope', 'Please enter the location you would like to add');
+    } else {
+        this.showHiddenMessage('Nope', 'Please enter your location into the search bar, or click the map to drop a pin.');
       }
+  },
 
-      },
-
-      displayReviewForm: function() {
-        console.log(currentProfile.title);
-        box = document.getElementById("addPlaceInfo");
-        title = document.createElement("h1");
-        title.setAttribute('style', 'color: #fdffb7;');
-        title.innerHTML = currentProfile.title;
-        box.appendChild(title);
-        console.log(title);
-        console.log(document.getElementById('hiddenReviewForm'))
-        this.showReviewForm(true);
-
-      },
-
-      submitAddInfo: function() {
-        match = this.findRestroom(addResult.id);
-        if (match === null) {
-
-          reviewDraft =  document.getElementById('addReview').value;
-          console.log(reviewDraft);
-          rating = addRating;
-          newRestroom = {
-            title: addResult.name,
-            reviews: [reviewDraft],
-            rating: [rating],
-            avgRating: rating,
-            location: addMarker.getPosition(),
-            id: addResult.id,
-            details: addDetails
-            }
-          model.restRooms.push(newRestroom);
-          this.createMarkers();
-          this.showSubmitForm(false);
-          this.showAddForm(false);
-          this.showHiddenMessage('OK', addResult.name + " has been added!");
-        } else {
-          this.showSubmitForm(false);
-          this.showAddForm(false);
-          this.showHiddenMessage('Nope', addResult.name + " is already a location. click the marker to review or Rate this location.");
-        }
-        this.clearField("addReview");
-        if (userLocation) {
-        userLocation.setVisible(false);
-        } 
-      },
-
-      submitReviewInfo: function() {
-        prof = this.findRestroom(currentProfile.id);
-        if (prof === null) {
-          this.showSubmitForm(false);
-          this.showAddForm(false);
-          this.showHiddenMessage('Nope', "Sorry, something went wrong");
-        } else {
-          reviewDraft =  document.getElementById('revReview').value;
-          prof.reviews.push(reviewDraft);
-          prof.rating.push(addRating);
-          prof.rating.push(rating);
-          console.log(prof.rating);
-          console.log(prof);
-          this.showSubmitForm(false);
-          this.showAddForm(false);
-          this.showHiddenMessage('OK', "Your review has been added to" + prof.title);
-        }
-        this.clearField("revReview");
-         
-      },
-
-      displayDirections: function(userLocation, destination){
-        document.getElementById("directionsBox").innerHTML = "";
-        directionsService = new google.maps.DirectionsService();
-        if(directionsDisplay != null) {
-          directionsDisplay.setMap(null);
-          directionsDisplay = null;
-        }
-        directionsDisplay = new google.maps.DirectionsRenderer({
-          suppressMarkers: true,
-          preserveViewport: true
-        });
-        directionsDisplay.setMap(map);
-        directionsDisplay.setPanel(document.getElementById("directionsBox"));
-        
-        origin = userLocation.getPosition();
-        endPoint = destination;
-        request = {
-          origin : origin,
-          destination: endPoint,
-          travelMode: 'WALKING'
-        };
-        directionsService.route(request, function(result, status) {
-          if (status == 'OK') {
-            directionsDisplay.setDirections(result);
-          }
-        });
-        viewModel.showDirections(true);
-      },
-
-      addRatingsListeners : function() {
-        gross = document.getElementById("gross");
-        kindaGross = document.getElementById("kindaGross");
-        fine = document.getElementById("fine");
-        kindaClean = document.getElementById("kindaClean");
-        clean = document.getElementById("clean");
-
-        gross.addEventListener('click', function() {
-          addRating = 1;
-        });
-        kindaGross.addEventListener('click', function() {
-        addRating = 2;
-        });
-        fine.addEventListener('click', function() {
-          addRating = 3;
-        });
-        kindaClean.addEventListener('click', function() {
-          addRating = 4;
-        });
-        clean.addEventListener('click', function() {
-          addRating = 5;
-        });
-
-        revGross = document.getElementById("revGross");
-        revKindaGross = document.getElementById("revKindaGross");
-        revFine = document.getElementById("revFine");
-        revKindaClean = document.getElementById("revKindaClean");
-        revClean = document.getElementById("revClean");
-
-        revGross.addEventListener('click', function() {
-          addRating = 1;
-        });
-        revKindaGross.addEventListener('click', function() {
-        addRating = 2;
-        });
-        revFine.addEventListener('click', function() {
-          addRating = 3;
-        });
-        revKindaClean.addEventListener('click', function() {
-          addRating = 4;
-        });
-        revClean.addEventListener('click', function() {
-          addRating = 5;
-        });
-
-      },
-
-      listLocations : function() {
-        directionsDisplay.setMap(null);
-        this.hideAllPopUps();
-        this.showLocationsList(true);
-        list = document.getElementById('restrooms');
-        list.innerHTML = "";
-        for (i = 0; i < model.restRooms.length ; i++) {
-          idnum = model.restRooms[i].id;
-          btn = document.createElement("BUTTON");
-          txt = document.createTextNode(model.restRooms[i].title);
-          btn.appendChild(txt);
-          btn.setAttribute('id', idnum)
-          btn.setAttribute('style', 'width: 100%; background-color: #233044; color: #fdffb7; font-size: 20px; border: none; padding: 3%;');
-          btn.setAttribute('hover', 'background-color: #36455e;');
-          list.appendChild(btn);
-          viewModel.addListListeners(idnum);
-          }
-  
-      },
-
-      addListListeners: function(id) {
-      
-        btn = document.getElementById(id);
-        btn.addEventListener('click', function(){
-          viewModel.hideAllMarkers();
-          viewModel.displayLocationProfile(id);
-          mark = viewModel.findMarker(id);
-          map.setCenter(mark.position);
-          mark.setVisible(true);
-
-        });
-      },
-
-      hideList : function() {
-        this.showLocationsList(false);
-      },
-
-      hideProfile : function() {
-        this.showLocationProfile(false);
-      },
-
-      clearField: function (field) {
-        review = document.getElementById(field);
-        if (review) {
-        review.value = "";
+  getDirections : function() {
+    current = this.findMarker(currentProfile.id).getPosition();
+    if (userLocation) {
+      this.displayDirections(userLocation, current);
+    } else {
+      this.showHiddenMessage('Nope', 'Please enter your location into the search bar, or click the map to drop a pin.');
       }
-      },
+  },
 
-      showHiddenMessage: function(response, message) {
-        bar = document.getElementById("hiddenMessageBar");
-        bar.innerHTML = '';
-        if (response === 'OK') {
-          bar.style = "padding-top: 2%; background-color: #5d993b; color: #dbe5d5; width: 100%; height: 5%; float: center; position: relative; opacity: .9; text-align: center;";
-          bar.innerHTML = message;
-          this.showAddedMessage(true);
-          setTimeout(viewModel.hideAllPopUps, 2000);
-        } else {
-          bar.style = "padding-top: 2%; background-color: #d84520; color: #dbe5d5; width: 100%; height: 5%; float: center; position: relative; opacity: .9; text-align: center;";
-          bar.innerHTML = message;
-          this.showAddedMessage(true);
-          setTimeout(viewModel.hideHiddenMessage, 3000);
-
+  showByRating : function(rating) {
+    //remove open circles/directions 
+    directionsDisplay.setMap(null);
+    if (circle) {
+      circle.setMap(null);
+    }
+    //choose ratings list div and set  it to blank
+    list = document.getElementById("ratingsFilterList");
+    list.innerHTML = '';
+    //iterate over restrooms and set locations 
+    for (i=0; i < model.restRooms.length; i += 1) {
+      //comapre average rating of locatino to rating choice
+      if (model.restRooms[i].avgRating >= rating) {
+        //set marker visibilty of location to true if location ranks at or higher than rating
+        viewModel.findMarker(model.restRooms[i].id).setVisible(true);
+        //add loction name to list if ranking it at or higer than chosen rating
+        idnum = model.restRooms[i].id;
+        btn = document.createElement("BUTTON");
+        txt = document.createTextNode(model.restRooms[i].title);
+        btn.appendChild(txt);
+        btn.setAttribute('id', idnum)
+        btn.setAttribute('style', 'width: 100%; background-color: #233044; color: #fdffb7; font-size: 20px; border: none; padding: 3%;');
+        list.appendChild(btn);
+        viewModel.addListListeners(idnum);
+      } else {
+        //set visibility to false if rating is below chasen rating 
+        viewModel.findMarker(model.restRooms[i].id).setVisible(false);
         }
-      },
-
-      hideHiddenMessage: function() {
-        viewModel.showAddedMessage(false);
-      },
-
-      hideReviewForm : function() {
-        viewModel.showReviewForm(false);
-      },
-
-      calculateRatingAvg : function(location) {
-      
-        if (location.rating.length ===0) {
-          return "Sorry, no one has offered any feedback yet.";
-        } else if (location.rating.length === 1) {
-          return location.rating[0];
-        } else {
-          sum = 0;
-          for (i = 0; i < location.rating.length ; i ++ ) {
-            sum += location.rating[i];
-          }
-          return (sum / location.rating.length);
-        }
-      },
-
-      displayLocationProfile : function(id) {
-        this.showDirections(false);
-        this.showLocationProfile(true);
-        mark = this.findRestroom(id);
-        currentProfile = mark;
-        document.getElementById("profileName").innerHTML = mark.title;
-        document.getElementById("profileName").setAttribute('style', 'width: 90%; background-color: #233044; color: #fdffb7; font-size: 35px; border: none; padding: 3%;');
-        document.getElementById("moreInfoButton").setAttribute('value', mark.id);
-        rating = this.calculateRatingAvg(currentProfile);
-        if (rating < 2) {
-          ratingDisplay = "gross";
-        } else if (2 >= rating && rating < 3 ) {
-          ratingDisplay = "kinda gross";
-        } else if ( 3 >= rating && rating < 4) {
-          ratingDisplay = "fine";
-        } else if ( 4 >= rating && rating < 5) {
-          ratingDisplay = "kinda clean";
-        } else {
-          ratingDisplay = "clean";
-        }
-        document.getElementById("profileRating").innerHTML = "Users think it's " + ratingDisplay;
-        document.getElementById("profileRating").setAttribute('style', 'width: 90%; background-color: #233044;' +
-        'color: #fdffb7; font-size: 18px; border: none; padding: 3%;');
-        
-        if (mark.reviews.length < 1) {
-          reviewsDisplay = "No reviews for this location yet.";
-          document.getElementById("profileReviews").innerHTML = reviewsDisplay;
-          document.getElementById("profileReviews").setAttribute('style', 'width: 90%; background-color: #3a4659;' +
-           'color: #fdffb7; font-size: 20px; border: none; padding: 3%;');
-        } else {
-          box = document.getElementById('profileReviews');
-          box.innerHTML = '';
-          for (i = 0; i < mark.reviews.length ; i++) {
-            rev = document.createElement('li');
-            rev.setAttribute("id", "rev" + i);
-            rev.style= 'width: 90%; background-color: #3a4659; color: #fdffb7; font-size: 15px; border: none; padding: 3%;';
-            rev.innerHTML = mark.reviews[i];
-            box.appendChild(rev);
-
-
-
-          }
-        }
-      },
-
-      findRestroom : function(id) {
-        for (i = 0; i < model.restRooms.length ; i ++) {
-          if (model.restRooms[i].id === id ) {
-            return model.restRooms[i] ;
-          }
-        }
-        return null;
-      },
-
-      findMarker : function(id) {
-        for (i = 0; i < model.markers.length ; i ++) {
-          if (model.markers[i].id === id ) {
-            return model.markers[i] ;
-          }
-        }
-        return null;
-      },
-
-      setDrawingMap : function() {
-        this.hideAllMarkers();
-        this.hideAllPopUps();
-        this.showFiltersBar(true);
-        drawingManager = new google.maps.drawing.DrawingManager({
-          drawingMode: google.maps.drawing.OverlayType.CIRCLE,
-          drawingControl: true,
-          drawingControlOptions: {
-            position: google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: [
-            google.maps.drawing.OverlayType.CIRCLE
-            ]
-          }
-        });
-      },
-
-      searchArea : function() {
-      for (i = 0; i < model.markers.length ; i ++) {
-        if (google.maps.geometry.spherical.computeDistanceBetween(model.markers[i].position, circle.getCenter()) <= circle.getRadius()) {
-          model.markers[i].setVisible(true);
-        } else {
-          model.markers[i].setVisible(false);
-        }
-      }      
-      },
-
-      searchWikiInfo : function(loc) {
-        url = 'https://en.wikipedia.org//w/api.php?callback=?&action=opensearch&format=json&profile=fuzzy' +
-        '&limit=1&uselang=en&prop=text&section=0&imageinfo&extracts&exintro=&explaintext&json&origin=*&iiprop=urll&search=';
-        url += loc;
-        $(document).ready(function(){
-          $.ajax({
-            type: 'GET',
-            url: url,
-            dataType: 'json',
-            success: function(result, status) {
-              if (result[2][0].length > 0) {
-                viewModel.profileWiki(result[2][0]);
-                viewModel.wikiLink(result[3][0]);
-              } else {
-                viewModel.profileWiki("No summary information is availble for this location. You may click the button below to check WikiPedia page.");
-                viewModel.wikiLink(result[3][0]);
-              }
-            },
-            error: function(status, error) {
-              viewModel.profileWiki("Unable to reach WikiPedia servers at this time.")
-            }
-          });
-        });
-      },
-
-      getGoogleImage: function(ref) {
-        url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&photoreference=";
-        url += ref;
-        return url;
-      },
-
-      displayMoreInfo : function() {
-        viewModel.showMoreInfo(true);
-        loc = document.getElementById('moreInfoButton').value;
-        place = this.findRestroom(loc);
-        this.profileName(place.title);
-        this.profileAddress(place.details.formatted_address);
-        moreImage = this.getGoogleImage(place.details.photos[0].photo_reference);
-        this.detailsImage(moreImage);
-
-        if (place.details.hasOwnProperty("photos")) {
-          detailsImages = "images/clearBrush.png";
-        }
-      
-        if (place.details.hasOwnProperty("opening_hours")) {
-          hours = place.details.opening_hours.weekday_text;
-          this.hoursArray(hours);
-        } else {
-          this.hoursArray(["No hours information available for this location"])
-        }
-        this.searchWikiInfo(place.title);
-      },
-
-      hideMoreInfo : function () {
-        this.showMoreInfo(false);
-        hours = null;
+      if (list.innerHTML === '') {
+        list.innerHTML = "No locations currently have that rating";
       }
     }
+    //set source of elements with id values less than chose rating to clearBrush,
+    // and at ot highger than rating to black Brush
+    document.getElementById(rating).src = "images/blackBrush.png";
+    for (i=5; i >= 1; i --) {
+      elem = document.getElementById(i);
+      if (elem.id >= rating) {
+        elem.src = "images/blackBrush.png";
+      } else {
+        elem.src = "images/clearBrush.png";
+      }
+    }
+  },
+  
+  addWindowInfo : function (marker, placeInfo){
+    if (activeWindow) {
+      activeWindow.close();
+    }
+    placeInfo = new google.maps.InfoWindow();
+    placeInfo.close(map, marker);
+    //set all unclicked markers to null
+    for (i = 0; i < model.markers.length; i += 1) {
+      model.markers[i].setAnimation(null);
+    }
+    //check current marker to be sure it isn't alredy clicked
+    if (placeInfo.marker != marker) {
+      placeInfo.setMarker = null;
+      activeWindow = placeInfo;
+      //set marker content to current mark title
+      placeInfo.setContent('<div>' + marker.title + '</div>');
+      placeInfo.open(map, marker);
+      //remove info window in closed
+      placeInfo.addListener('closeclick', function(){
+        placeInfo.setMarker = null;
+      });
+    }
+  },
+
+  displayAddForm: function() {
+    if (addMarker) {
+      this.showAddForm(true);
+      this.showSubmitForm(true);
+    } else {
+      this.showHiddenMessage('Nope', 'Please enter the location you would like to add');
+    }
+  },
+
+  displayReviewForm: function() {
+    console.log(currentProfile.title);
+    box = document.getElementById("addPlaceInfo");
+    title = document.createElement("h1");
+    title.setAttribute('style', 'color: #fdffb7;');
+    title.innerHTML = currentProfile.title;
+    box.appendChild(title);
+    console.log(title);
+    console.log(document.getElementById('hiddenReviewForm'))
+    this.showReviewForm(true);
+  },
+
+  submitAddInfo: function() {
+    match = this.findRestroom(addResult.id);
+    if (match === null) {
+      reviewDraft =  document.getElementById('addReview').value;
+      console.log(reviewDraft);
+      rating = addRating;
+      newRestroom = {
+      title: addResult.name,
+      reviews: [reviewDraft],
+      rating: [rating],
+      avgRating: rating,
+      location: addMarker.getPosition(),
+      id: addResult.id,
+      details: addDetails
+      }
+      model.restRooms.push(newRestroom);
+      this.createMarkers();
+      this.showSubmitForm(false);
+      this.showAddForm(false);
+      this.showHiddenMessage('OK', addResult.name + " has been added!");
+    
+    } else {
+      this.showSubmitForm(false);
+      this.showAddForm(false);
+      this.showHiddenMessage('Nope', addResult.name + " is already a location. click the marker to review or Rate this location.");
+    }
+    this.clearField("addReview");
+    if (userLocation) {
+      userLocation.setVisible(false);
+    } 
+  },
+
+  submitReviewInfo: function() {
+    prof = this.findRestroom(currentProfile.id);
+    if (prof === null) {
+      this.showSubmitForm(false);
+      this.showAddForm(false);
+      this.showHiddenMessage('Nope', "Sorry, something went wrong");
+    } else {
+      reviewDraft =  document.getElementById('revReview').value;
+      prof.reviews.push(reviewDraft);
+      prof.rating.push(addRating);
+      prof.rating.push(rating);
+      console.log(prof.rating);
+      console.log(prof);
+      this.showSubmitForm(false);
+      this.showAddForm(false);
+      this.showHiddenMessage('OK', "Your review has been added to" + prof.title);
+    }
+    this.clearField("revReview");
+  },
+
+  displayDirections: function(userLocation, destination){
+    document.getElementById("directionsBox").innerHTML = "";
+    directionsService = new google.maps.DirectionsService();
+    if(directionsDisplay != null) {
+      directionsDisplay.setMap(null);
+      directionsDisplay = null;
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      preserveViewport: true
+    });
+    directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById("directionsBox"));  
+    origin = userLocation.getPosition();
+    endPoint = destination;
+    request = {
+      origin : origin,
+      destination: endPoint,
+      travelMode: 'WALKING'
+    };
+    directionsService.route(request, function(result, status) {
+      if (status == 'OK') {
+        directionsDisplay.setDirections(result);
+      } else if (status == 'NOT_FOUND' || status == 'ZERO_RESULTS') {
+        viewModel.showHiddenMessage('Nope', 'Unable to get directions for entered locations');
+      }
+    });
+    viewModel.showDirections(true);
+  },
+
+  addRatingsListeners : function() {
+    gross = document.getElementById("gross");
+    kindaGross = document.getElementById("kindaGross");
+    fine = document.getElementById("fine");
+    kindaClean = document.getElementById("kindaClean");
+    clean = document.getElementById("clean");
+    gross.addEventListener('click', function() {
+      addRating = 1;
+    });
+    kindaGross.addEventListener('click', function() {
+      addRating = 2;
+    });
+      fine.addEventListener('click', function() {
+      addRating = 3;
+    });
+    indaClean.addEventListener('click', function() {
+      addRating = 4;
+    });
+    clean.addEventListener('click', function() {
+      addRating = 5;
+    });
+
+    revGross = document.getElementById("revGross");
+    revKindaGross = document.getElementById("revKindaGross");
+    revFine = document.getElementById("revFine");
+    revKindaClean = document.getElementById("revKindaClean");
+    revClean = document.getElementById("revClean");
+    revGross.addEventListener('click', function() {
+      addRating = 1;
+    });
+    revKindaGross.addEventListener('click', function() {
+      addRating = 2;
+    });
+    revFine.addEventListener('click', function() {
+      addRating = 3;
+    });
+    revKindaClean.addEventListener('click', function() {
+      addRating = 4;
+    });
+    revClean.addEventListener('click', function() {
+      addRating = 5;
+    });
+  },
+
+  listLocations : function() {
+    directionsDisplay.setMap(null);
+    this.hideAllPopUps();
+    this.showLocationsList(true);
+    list = document.getElementById('restrooms');
+    list.innerHTML = "";
+    for (i = 0; i < model.restRooms.length ; i++) {
+      idnum = model.restRooms[i].id;
+      btn = document.createElement("BUTTON")
+      txt = document.createTextNode(model.restRooms[i].title)
+      btn.appendChild(txt);
+      btn.setAttribute('id', idnum
+      btn.setAttribute('style', 'width: 100%; background-color: #233044; color: #fdffb7; font-size: 20px; border: none; padding: 3%;');
+      btn.setAttribute('hover', 'background-color: #36455e;');
+      list.appendChild(btn);
+      viewModel.addListListeners(idnum);
+    }
+  },
+
+  addListListeners: function(id) {
+    btn = document.getElementById(id);
+    btn.addEventListener('click', function(){
+      viewModel.hideAllMarkers();
+      viewModel.displayLocationProfile(id);
+      mark = viewModel.findMarker(id);
+      map.setCenter(mark.position);
+      mark.setVisi
+    });
+  },
+
+  hideList : function() {
+    this.showLocationsList(false);
+  },
+
+  hideProfile : function() {
+    this.showLocationProfile(false);
+  },
+
+  clearField: function (field) {
+    review = document.getElementById(field);
+    if (review) {
+      review.value = "";
+    }
+  },
+
+  showHiddenMessage: function(response, message) {
+    bar = document.getElementById("hiddenMessageBar");
+    bar.innerHTML = '';
+    if (response === 'OK') {
+      bar.style = "padding-top: 2%; background-color: #5d993b; color: #dbe5d5; width: 100%; height: 5%; float: center; position: relative; opacity: .9; text-align: center;";
+      bar.innerHTML = message;
+      this.showAddedMessage(true);
+      setTimeout(viewModel.hideAllPopUps, 2000);
+    } else {
+      bar.style = "padding-top: 2%; background-color: #d84520; color: #dbe5d5; width: 100%; height: 5%; float: center; position: relative; opacity: .9; text-align: center;";
+      bar.innerHTML = message;
+      this.showAddedMessage(true);
+      setTimeout(viewModel.hideHiddenMessage, 3000);
+      }
+  },
+  
+  hideHiddenMessage: function() {
+    viewModel.showAddedMessage(false);
+  },
+
+  hideReviewForm : function() {
+    viewModel.showReviewForm(false);
+  },
+
+  calculateRatingAvg : function(location) {
+    if (location.rating.length ===0) {
+      return "Sorry, no one has offered any feedback yet.";
+    } else if (location.rating.length === 1) {
+      return location.rating[0];
+    } else {
+      sum = 0;
+      for (i = 0; i < location.rating.length ; i ++ ) {
+        sum += location.rating[i];
+      }
+      return (sum / location.rating.length);
+      }
+    },
+
+  displayLocationProfile : function(id) {
+    this.showDirections(false);
+    this.showLocationProfile(true);
+    mark = this.findRestroom(id);
+    currentProfile = mark;
+    document.getElementById("profileName").innerHTML = mark.title;
+    document.getElementById("profileName").setAttribute('style', 'width: 90%; background-color: #233044; color: #fdffb7; font-size: 35px; border: none; padding: 3%;');
+    document.getElementById("moreInfoButton").setAttribute('value', mark.id);
+    rating = this.calculateRatingAvg(currentProfile);
+    if (rating < 2) {
+      ratingDisplay = "gross";
+    } else if (2 >= rating && rating < 3 ) {
+      ratingDisplay = "kinda gross";
+    } else if ( 3 >= rating && rating < 4) {
+      ratingDisplay = "fine";
+    } else if ( 4 >= rating && rating < 5) {
+      ratingDisplay = "kinda clean";
+    } else {
+      ratingDisplay = "clean";
+    }
+    document.getElementById("profileRating").innerHTML = "Users think it's " + ratingDisplay;
+    document.getElementById("profileRating").setAttribute('style', 'width: 90%; background-color: #233044;' +
+      'color: #fdffb7; font-size: 18px; border: none; padding: 3%;');    
+    if (mark.reviews.length < 1) {
+      reviewsDisplay = "No reviews for this location yet.";
+      document.getElementById("profileReviews").innerHTML = reviewsDisplay;
+      document.getElementById("profileReviews").setAttribute('style', 'width: 90%; background-color: #3a4659;' +
+        'color: #fdffb7; font-size: 20px; border: none; padding: 3%;');
+      } else {
+        box = document.getElementById('profileReviews');
+        box.innerHTML = '';
+        for (i = 0; i < mark.reviews.length ; i++) {
+          rev = document.createElement('li');
+          rev.setAttribute("id", "rev" + i);
+          rev.style= 'width: 90%; background-color: #3a4659; color: #fdffb7; font-size: 15px; border: none; padding: 3%;';
+          rev.innerHTML = mark.reviews[i];
+          box.appendChild(rev);
+      }
+    }
+  },
+
+  findRestroom : function(id) {
+    for (i = 0; i < model.restRooms.length ; i ++) {
+      if (model.restRooms[i].id === id ) {
+        return model.restRooms[i] ;
+      }
+    }
+    return null;
+  },
+
+  findMarker : function(id) {
+    for (i = 0; i < model.markers.length ; i ++) {
+      if (model.markers[i].id === id ) {
+        return model.markers[i] ;
+      }
+    }
+    return null;
+  },
+
+  setDrawingMap : function() {
+    this.hideAllMarkers();
+    this.hideAllPopUps();
+    this.showFiltersBar(true);
+    drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.CIRCLE,
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [
+          google.maps.drawing.OverlayType.CIRCLE
+        ]
+      }
+    });
+  },
+
+  searchArea : function() {
+    for (i = 0; i < model.markers.length ; i ++) {
+      if (google.maps.geometry.spherical.computeDistanceBetween(model.markers[i].position, circle.getCenter()) <= circle.getRadius()) {
+        model.markers[i].setVisible(true);
+      } else {
+          model.markers[i].setVisible(false);
+        }
+    }      
+  },
+
+  searchWikiInfo : function(loc) {
+    url = 'https://en.wikipedia.org//w/api.php?callback=?&action=opensearch&format=json&profile=fuzzy' +
+    '&limit=1&uselang=en&prop=text&section=0&imageinfo&extracts&exintro=&explaintext&json&origin=*&iiprop=urll&search=';
+    url += loc;
+    $(document).ready(function(){
+      $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function(result, status) {
+          if (result[2][0].length > 0) {
+            viewModel.profileWiki(result[2][0]);
+            viewModel.wikiLink(result[3][0]);
+          } else {
+            viewModel.profileWiki("No summary information is availble for this location. You may click the button below to check WikiPedia page.");
+            viewModel.wikiLink(result[3][0]);
+          }
+        },
+        error: function(status, error) {
+          viewModel.profileWiki("Unable to reach WikiPedia servers at this time.")
+        }
+      });
+    });
+  },
+
+  getGoogleImage: function(ref) {
+    url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&photoreference=";
+    url += ref;
+    return url;
+  },
+
+  displayMoreInfo : function() {
+    viewModel.showMoreInfo(true);
+    loc = document.getElementById('moreInfoButton').value;
+    place = this.findRestroom(loc);
+    this.profileName(place.title);
+    this.profileAddress(place.details.formatted_address);
+    moreImage = this.getGoogleImage(place.details.photos[0].photo_reference);
+    this.detailsImage(moreImage);
+    if (place.details.hasOwnProperty("photos")) {
+      detailsImages = "images/clearBrush.png";
+    }  
+    if (place.details.hasOwnProperty("opening_hours")) {
+      hours = place.details.opening_hours.weekday_text;
+      this.hoursArray(hours);
+    } else {
+      this.hoursArray(["No hours information available for this location"])
+      }
+    this.searchWikiInfo(place.title);
+  }
+}
 
 var model = {
       markers : [],
