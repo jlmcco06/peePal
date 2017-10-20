@@ -38,30 +38,42 @@ Entering your location in the address bar will engage an autocomplete call to go
 
 Toolbar options include: 
 
-*Find
-	-**Find nearest** - Automatically find the nearest restroom to your current location, and display location profile and directions.
-	-**Draw Search Area** - Allows user to draw a circle around the area she would like to search, restrooms within the bounds of the search are will become visible.
-	-**Show by rating** - Displays a ratings bar/list. When a rating level is chosen, all restrooms at that rating level or higher will be displayed.
-	-Hide All - hide all restrooms on map
+**Find**
 
-*Add
-	-**Displays add bar** - Similar to entering your location in the search bar, the add bar will find the location you would like to add. Once you choose the "add" button, the form to enter your own ratings and reviews of the restroom will be displayed. 
-*Show All
-	-**Displays all locations**
-*List
-	-**Lists all locations** as buttons, which, when clicked, will center on chosen location and display location profile. 
+1. Find neares - Automatically find the nearest restroom to your current location, and display location profile and directions.
+
+2. Draw Search Area - Allows user to draw a circle around the area she would like to search, restrooms within the bounds of the search are will become visible.
+
+3. Show by rating** - Displays a ratings bar/list. When a rating level is chosen, all restrooms at that rating level or higher will be displayed.
+
+4. Hide All - hide all restrooms on map
+
+**Add**
+
+1. Displays add bar - Similar to entering your location in the search bar, the add bar will find the location you would like to add. Once you choose the "add" button, the form to enter your own ratings and reviews of the restroom will be displayed.
+ 
+**Show All**
+
+1. Displays all locations
+
+**List**
+
+1. Lists all locations as buttons, which, when clicked, will center on chosen location and display location profile. 
 
 ##Location profile
 
 At any time you may choose to view the location profile by clicking on the toilet paper icons on the map, or clicking on the location name on any list. from here you may choose to:
 
-	-**View average rating** - The "Users think it's" sentence takes the average rating of the location and displays that numeric rating as a string: 1-Gross, 2-Kinda gross, 3-Fine, 4-Kinda clean, 5-Clean.
-	-**Read reviews**
-	-**Rate/Review** - add your own rating or review
-	-**More info** - view more info about the location, including picture, hours, and Wikipedia informatio. You may also choose to leave to the wikipedia page and find out more!
-	-**Directions** - Get directions from userLocation whichever profile you're viewing at any time
+1. View average rating - The "Users think it's" sentence takes the average rating of the location and displays that numeric rating as a string: 
+1-Gross, 2-Kinda gross, 3-Fine, 4-Kinda clean, 5-Clean.
+
+2. Read reviews
+
+3. Rate/Review- add your own rating or review
+
+4. More info - view more info about the location, including pictures, hours, and Wikipedia information. You may also choose to leave to the Wikipedia page and find out more!
+
+5. Directions** - Get directions from userLocation whichever profile you're viewing at any time
 
 The location profile is also the place in which any directions request will be displayed.   
 
-
-  
