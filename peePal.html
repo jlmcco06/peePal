@@ -85,18 +85,30 @@
     <div id="hiddenLocationProfile" data-bind="visible: showLocationProfile">
       <button class='button' data-bind='click: hideProfile' id='profileCloseButton'>X</button>
       <br>
-      <div id="profileName" data-bind="text: profileName"></div>
-      <br>
-      <div id="profileRating" data-bind="text: profileRating"></div>
-      <p> Here's what some people are saying:</p>
-      <ul id="profileReviews" data-bind=" foreach : reviewsArray">
-        <li id="review" data-bind=" text: $data"></li>
-      </ul>
-      <div id = "profileButtonsContainer">
-        <button class="button" id="rateReviewButton" data-bind="click: displayReviewForm">Rate/ Review</button>
+      Images from Flickr
+      <div id="images">
+        <ul id="profileImagesContainer" data-bind="foreach : flickrPhotosArray">
+          <img id="flickrImages" data-bind="attr: {src: $data, alt: stockImage}">
+        </ul>
+      </div>
+      <div id="profileInfo">
+        <div id="profileName" data-bind="text: profileName"></div>
+        <br>
+        <div id="profileRating" data-bind="text: profileRating"></div>
+        <br>
+        <h3>Information from Wikipedia</h3>
+        <p id="wikiInfo" data-Bind="text : profileWiki"></p>
+        <div id="wikiButton">
+          <br>
+          <a class="button" data-bind="attr: {href: wikiLink}" id="wikiLinkButton">Visit Wikipedia Page</a>
+          <br>
+        </div>
+      <div id="profileButtonsContainer">
+        <button class="button" id="rateReviewButton" data-bind="click: displayReviewForm"> Review </button>
         <button class="button" id="moreInfoButton" data-bind="click: displayMoreInfo"> More info </button>
         <button class="button" id="showDirectionsButton" data-bind="click: getDirections">Directions </button>
       </div>
+    </div>
       <div id="directionsContainer" data-bind="visible: showDirections">
         <div id="directionsBox"></div>
       </div>
@@ -124,13 +136,15 @@
       <ul id="hoursList" data-bind="foreach : hoursArray">
         <li id="hour" data-bind="text: $data"></li>
       </ul>
-      <h3>Information from Wikipedia</h3>
-      <p id="wikiInfo" data-Bind="text : profileWiki"></p>
-      <a data-bind="attr: {href: wikiLink}" class="button" id="wikiLinkButton">Visit Wikipedia Page for this Location</a>
+      <p> Here's what some people are saying:</p>
+      <ul id="profileReviews" data-bind=" foreach : reviewsArray">
+        <li id="review" data-bind=" text: $data"></li>
+      </ul>
     </div>
   </div>
 	<script>
 
+  /*global arrayContainer:true, DomObjects:true */
     //INITIALIZE MAP AND STYLING
 
    		//create styling for map
@@ -190,7 +204,7 @@
    		function initMap() {
 
      	  //set map in philadelphia
-     	  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.952584, lng:-75.165222},
+     	  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.963043409283806, lng:-75.16313552856445},
      		 zoom: 13,
      		 disableDefaultUI: true,
      		 styles: styles
@@ -287,10 +301,9 @@
               visible: true,
               icon: icon
               });
-              map.setCenter(userLocation.position);
-              //viewModel.findNearest(userLocation);
           }
           map.setCenter(userLocation.position);
+          console.log(userLocation.position.lat(), userLocation.position.lng())
         }//end dropPin
       });//end click-map event listener
 

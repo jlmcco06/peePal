@@ -1,10 +1,7 @@
-
-
 html, body { margin: 0; padding: 0; font-family: sans-serif; }
 
 ul{
   padding: 3%;
-
 }
 
 li {
@@ -26,7 +23,6 @@ li {
 
 #toolbar { 
 	width: 94%;
-	height: 1%;
   padding: 3%;
 	background-color: #233044;
   position: relative;
@@ -34,6 +30,7 @@ li {
   display: -webkit-flex;
   display: flex;
 }
+
   #logo {
     width: 20%;
     max-height: 50%;
@@ -255,7 +252,7 @@ li {
 
 #hiddenLocationProfile {
   width: 30%;
-  height: 65%;
+  height: 58%;
   background-color: #233044;
   margin: 0 auto;
   position: absolute;
@@ -270,21 +267,49 @@ li {
   text-align: left;
   padding-left: 2%;
 }
+  #images {
+    height: 40%;
+    width: 90%;
+    overflow: auto;
+  }
+  #profileImagesContainer {
+    padding: 0;
+  }
+  #flickrImages {
+    height: 100%;
+    width: auto;
+  }
+  #profileInfo{
+    height: 50%;
+  }
   #profileName {
     font-size: 200%;
   }
-  #profileReviews, #review{ 
+  h3{
+    font-size: 90%;
+  }
+  #wikiInfo {
+    padding: 2%;
     width: 90%;
     height: 30%;
-    background-color: #36455e;
+    background-color: #3a4659;
     position: relative;
-    display: table;
-    opacity: .9;
+    opacity: .98;
     float: left;
+    max-height: 100%;
+    font-size: 90%;
     overflow: auto;
-  }
+    }
+    #wikiLinkButton {
+      text-decoration: none;
+      height: 5%;
+      width: 84%;
+      background-color: #fdffb7;
+      color: #233044;
+      display: block;
+    }
   #profileButtonsContainer {
-    width: 90%;
+    width: 100%;
     display: block;
   }
     #rateReviewButton, #moreInfoButton, #showDirectionsButton {
@@ -373,22 +398,15 @@ li {
             font-size: 70%;
             max-height: 95%;
           }
-        #wikiInfo {
-          padding: 2%;
+        #profileReviews, #review{ 
           width: 90%;
-          height: 50%;
-          background-color: #3a4659;
+          height: 30%;
+          background-color: #36455e;
           position: relative;
-          opacity: .98;
+          display: table;
+          opacity: .9;
           float: left;
-          max-height: 100%;
-          font-size: 90%;
-        }
-        #wikiLinkButton {
-          width: 90%;
-          height: 20%;
-          background-color: #fdffb7;
-          color: #233044;
+          overflow: auto;
         }
 
 

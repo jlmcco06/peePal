@@ -2,12 +2,12 @@
 /*global arrayContainer:true, SliderInstance:true, DomObjects:true */
 var viewModel = {
   createMarker : function (location) {
-    var placeInfo = new google.maps.InfoWindow();
-    var pos = location.location;
-    var name = location.title;
-    var id = location.id;
-    var map = map;
-    var icon = "images/TP.png";
+    placeInfo = new google.maps.InfoWindow();
+    pos = location.location;
+    name = location.title;
+    id = location.id;
+    map = map;
+    icon = "images/TP.png";
 
     var mark = new google.maps.Marker({
       id: id,
@@ -80,6 +80,7 @@ var viewModel = {
   restroomsArray : ko.observableArray(),
   profileRating : ko.observable(),
   reviewsArray : ko.observableArray(),
+  flickrPhotosArray : ko.observableArray(),
 
   displayFindBox: function(){
     this.hideAllPopUps();
@@ -443,8 +444,10 @@ var viewModel = {
     this.showDirections(false);
     this.showLocationProfile(true);
     mark = this.findRestroom(id);
+    this.getFlickrImage(mark.title);
     currentProfile = mark;
     this.profileName(mark.title);
+    this.searchWikiInfo(mark.title);
     document.getElementById("moreInfoButton").setAttribute('value', mark.id);
     rating = this.calculateRatingAvg(currentProfile);
     this.profileRating("Users think it's : " + rating);  
@@ -524,6 +527,32 @@ var viewModel = {
     });
   },
 
+  getFlickrImage: function (title) {
+    search = title.split(" ");
+    search.push("Philadelphia,Pennsylvania");
+    search = search.toString();
+    url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=b8660599f802c619f1bf187ac20fabb3&&tag_mode=any&sort=relevance&per_page=5&format=json&nojsoncallback=1&tags=";
+    url += search;
+    $.ajax({
+      type: 'GET',
+      url: url,
+      dataType: 'json',
+      success: function(response) {
+        imgsrcs = [];
+        for (i = 0 ; i < response.photos.photo.length; i ++) {
+          pic = response.photos.photo[i];
+          src = "https://farm"+pic.farm+".staticflickr.com/"+pic.server+"/"+pic.id+"_"+pic.secret+".jpg";
+          imgsrcs.push(src);
+        }
+        viewModel.flickrPhotosArray(imgsrcs);
+      },
+      error: function(result) {
+        console.log(result);
+      }
+    })
+    
+  },
+
   getGoogleImage: function(ref) {
     url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&photoreference=";
     url += ref;
@@ -546,8 +575,7 @@ var viewModel = {
       this.hoursArray(hours);
     } else {
       this.hoursArray(["No hours information available for this location"]);
-      }
-    this.searchWikiInfo(place.title);
+    }
   },
 
   hideMoreInfo : function () {
