@@ -1,5 +1,6 @@
 // Model defiend below viewModel due to length or entries
 var viewModel = {
+  /*global arrayContainer:true, SliderInstance:true, DomObjects:true */
   createMarker : function (location) {
     var placeInfo = new google.maps.InfoWindow();
     pos = location.location;
@@ -291,7 +292,7 @@ var viewModel = {
     }
     addRating = null;
   } else {
-    this.showHiddenMessage('Nope', 'Please rate location before submitting.')
+    this.showHiddenMessage('Nope', 'Please rate location before submitting.');
   }
 
   },
