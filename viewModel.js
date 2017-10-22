@@ -1,15 +1,15 @@
 // Model defiend below viewModel due to length or entries
+/*global arrayContainer:true, SliderInstance:true, DomObjects:true */
 var viewModel = {
-  /*global arrayContainer:true, SliderInstance:true, DomObjects:true */
   createMarker : function (location) {
     var placeInfo = new google.maps.InfoWindow();
-    pos = location.location;
-    name = location.title;
-    id = location.id;
-    map = map;
-    icon = "images/TP.png";
+    var pos = location.location;
+    var name = location.title;
+    var id = location.id;
+    var map = map;
+    var icon = "images/TP.png";
 
-    mark = new google.maps.Marker({
+    var mark = new google.maps.Marker({
       id: id,
       position: pos,
       map: map,
@@ -161,7 +161,7 @@ var viewModel = {
   },
 
   getDirections : function() {
-    current = this.findMarker(currentProfile.id).getPosition();
+    var current = this.findMarker(currentProfile.id).getPosition();
     if (userLocation) {
       this.displayDirections(userLocation, current);
     } else {
@@ -176,7 +176,7 @@ var viewModel = {
       circle.setMap(null);
     }
     //choose ratings list div and set  it to blank
-    list = document.getElementById("ratingsFilterList");
+    var list = document.getElementById("ratingsFilterList");
     list.innerHTML = "";
     //iterate over restrooms and set locations 
     for (i = 0; i < model.restRooms.length; i += 1) {
@@ -215,7 +215,7 @@ var viewModel = {
   },
   
   addWindowInfo : function (marker, placeInfo){
-    placeInfo = new google.maps.InfoWindow();
+    var placeInfo = new google.maps.InfoWindow();
     if (activeWindow) {
       activeWindow.close();
     }
@@ -248,9 +248,8 @@ var viewModel = {
   },
 
   displayReviewForm: function() {
-    console.log(currentProfile.title);
-    box = document.getElementById("addPlaceInfo");
-    title = document.createElement("h1");
+    var box = document.getElementById("addPlaceInfo");
+    var title = document.createElement("h1");
     title.setAttribute("style", "color: #fdffb7;");
     title.innerHTML = currentProfile.title;
     box.appendChild(title);
@@ -261,11 +260,11 @@ var viewModel = {
 
   submitAddInfo: function() {
     if (addRating) {
-      match = this.findRestroom(addResult.id);
+      var match = this.findRestroom(addResult.id);
       if (match === null) {
-        reviewDraft = document.getElementById("addReview").value;
-        rating = addRating;
-        newRestroom = {
+        var reviewDraft = document.getElementById("addReview").value;
+        var rating = addRating;
+        var newRestroom = {
           title: addResult.name,
           reviews: [reviewDraft],
           rating: [rating],
