@@ -14,25 +14,35 @@
   <div class="container">
     <div id="map"></div>
     <div id="toolbar">
-      <h1>PeePal</h1>
-      <input id="locationBox" type="text" placeholder="  Enter your location, or click your location on the map to drop a pin"></input>
+      <div id="logo">
+        <h1>PeePal</h1>
+      </div>
+      <div id="userLocBox">
+        <input id="locationBox" type="text" placeholder="  Enter your location, or click your location on the map to drop a pin">
+      </div>
     </div>
     <div id="tools">
         <button class='button' data-bind="click: displayFiltersBar" id='find'>Find</button>
-        <button class='button' data-bind='click: displayAddBox'id='add'>Add</button>
+        <button class='button' data-bind='click: displayAddBox' id='add'>Add</button>
         <button class='button' data-bind="click: showAllMarkers" id='showAll'>Show All</button>
         <button class='button' data-bind="click: listLocations" id='list'>List</button>
     </div>
     <div id='hiddenAddLocationBox' data-Bind='visible: showAddBox'>
-      <input id="addLocationBox" type="text" onfocus="viewModel.clearField(this)" placeholder="Enter the location you would like to add">
-      <button id ="addButton"class="button" data-bind="click: displayAddForm">Add</button>
+      <div id="addBoxContainer">
+        <input id="addLocationBox" type="text" onfocus="viewModel.clearField(this)" placeholder="Enter the location you would like to add">
+      </div>
+      <div id="addButtonContainer">
+        <button id ="addButton" class="button" data-bind="click: displayAddForm">Add</button>
+      </div>
     </div>
-    <div id="hiddenMessageBar" data-bind="visible: showAddedMessage"></div>
     <div id="hiddenFiltersBar" data-bind='visible: showFiltersBar'>
       <button class='filterButton' data-bind="click: findNearest" id='filtersButton'>Find Nearest </button>
-      <button class='filterButton' data-bind='click: setDrawingMap'id='drawFiltersButton'>Draw search area</button>
+      <button class='filterButton' data-bind='click: setDrawingMap' id='drawFiltersButton'>Draw search area</button>
       <button class='filterButton' data-bind="click: showRatingsFilter" id='filtersButton'>Show by rating</button>
       <button class='filterButton' data-bind='click: hideAllMarkers' id='hideButton'> Hide All</button>
+    </div>
+    <div id="hiddenMessageBar" data-bind="visible: showAddedMessage">
+      <div id="hiddenMessage" data-bind="text : showMessage"></div>
     </div>
     <div id="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
       <div id="ratingsFilterList"> Choose a rating level </div>
@@ -50,11 +60,11 @@
         <div id="addPlaceInfo"></div>
         <textarea class="reviewBox" id="addReview" placeholder="Write a review of this restroom here!"></textarea>
         <div id="reviewButtons">
-          <button id="gross" class="reviewbutton">Gross!</button>
-          <button id="kindaGross" class="reviewbutton">Kinda gross</button>
-          <button id="fine" class="reviewbutton">Fine</button>
-          <button id="kindaClean" class="reviewbutton">Kinda clean</button>
-          <button id="clean" class="reviewbutton">Clean!</button>
+          <button id="gross" data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
+          <button id="kindaGross" data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
+          <button id="fine" data-bind="click : setAddRating.bind($data, '3')" class="reviewbutton">Fine</button>
+          <button id="kindaClean" data-bind="click : setAddRating.bind($data, '4')" class="reviewbutton">Kinda clean</button>
+          <button id="clean" data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
         </div>
         <div id="hiddenSubmitFormButton" data-bind="visible: showSubmitForm">
       <button class="submitBarButton" data-bind='click: submitAddInfo' id="submitFormButton">Submit</button>
@@ -63,36 +73,43 @@
     </div>
     <div id="hiddenLocationsList" data-bind="visible: showLocationsList">
       <button class='button' data-bind='click: hideList' id='listCloseButton'>X</button>
-      <br></br>
-      <ul class="restroomList" id="restrooms"> 
+      <br>
+      <ul class="restroomList" id="restrooms" data-bind="foreach : restroomsArray">
+        <li>
+          <button class="button" id="listItem" data-bind="event : { click: $parent.getProfile }">
+            <span id="listItemName" data-bind="text: title"></span>
+          </button>
+        </li> 
       </ul>
     </div>
     <div id="hiddenLocationProfile" data-bind="visible: showLocationProfile">
       <button class='button' data-bind='click: hideProfile' id='profileCloseButton'>X</button>
-      <br></br>
-      <div id="profileName"></div>
-      <div id="profileRating"></div>
+      <br>
+      <div id="profileName" data-bind="text: profileName"></div>
+      <br>
+      <div id="profileRating" data-bind="text: profileRating"></div>
       <p> Here's what some people are saying:</p>
-      <ul id="profileReviews"></ul>
+      <ul id="profileReviews" data-bind=" foreach : reviewsArray">
+        <li id="review" data-bind=" text: $data"></li>
+      </ul>
       <div id = "profileButtonsContainer">
-        <button class="button" id="rateReviewButton" data-bind="click: displayReviewForm">Rate/Review</button>
+        <button class="button" id="rateReviewButton" data-bind="click: displayReviewForm">Rate/ Review</button>
         <button class="button" id="moreInfoButton" data-bind="click: displayMoreInfo"> More info </button>
         <button class="button" id="showDirectionsButton" data-bind="click: getDirections">Directions </button>
       </div>
-      <div id=" directionsContainer" data-bind="visible: showDirections">
+      <div id="directionsContainer" data-bind="visible: showDirections">
         <div id="directionsBox"></div>
       </div>
     </div>
     <div id="hiddenReviewForm" data-bind="visible: showReviewForm">
-        <div id="addPlaceInfo"></div>
-        <br></br>
+        <br>
         <textarea class="reviewBox" id="revReview" placeholder="Write a review of this restroom here!"></textarea>
         <div id="reviewButtons">
-          <button id="revGross" class="reviewbutton">Gross!</button>
-          <button id="revKindaGross" class="reviewbutton">Kinda gross</button>
-          <button id="revFine" class="reviewbutton">Fine</button>
-          <button id="revKindaClean" class="reviewbutton">Kinda clean</button>
-          <button id="revClean" class="reviewbutton">Clean!</button>
+          <button id="revGross" data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
+          <button id="revKindaGross" data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
+          <button id="revFine" data-bind="click : setAddRating.bind($data, '3')" class="reviewbutton">Fine</button>
+          <button id="revKindaClean" data-bind="click : setAddRating.bind($data, '4')" class="reviewbutton">Kinda clean</button>
+          <button id="revClean" data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
         </div>
         <div id="hiddenSubmitFormButton" data-bind="visible: showReviewForm">
       <button class="submitBarButton" data-bind='click: submitReviewInfo' id="submitFormButton">Submit</button>
@@ -101,7 +118,7 @@
   </div>
     <div id="moreInfoContainer" data-bind="visible: showMoreInfo">
       <button class='button' data-bind='click: hideMoreInfo' id='moreInfoCloseButton'>X</button>
-      <img id="profileImage"data-bind="attr: {src: detailsImage}" >
+      <img id="profileImage"data-bind="attr: {src: detailsImage, alt: stockImage}" >
       <h2 data-bind="text : profileName"></h2>
       <span data-bind="text : profileAddress"></span>
       <ul id="hoursList" data-bind="foreach : hoursArray">
@@ -158,17 +175,17 @@
     var origin;
     var directionsDisplay;
     var map;
-    var addRating;
+    var addRating = null;
     var addResult;
     var addDetails;
     var currentProfile;
     var matrixResponse;
     var closestLoc;
-    var circle = null;
+    var circle;
     var activeWindow;
     var hours = null;
-    var moreImage = null;
-    var stockImage = "images/blackBrush.png";
+    var moreImage;
+    var stockImage = "images/noimage.jpg";
    		//initialize map
    		function initMap() {
 
@@ -185,7 +202,7 @@
         directionsDisplay = new google.maps.DirectionsRenderer();
         directionsDisplay.setMap(map);
 
-        viewModel.createMarkers();
+        viewModel.initializeMarkers();
 
         var drawingManager = new google.maps.drawing.DrawingManager({
           drawingMode: google.maps.drawing.OverlayType.CIRCLE,
@@ -337,11 +354,7 @@
           addDetails = adderAutocomplete.getPlace();
         });//end adder autocopmlete
 
-      adderAutocomplete.bindTo('bounds', map);
-
-    //add listeners for ratings buttons
-    viewModel.addRatingsListeners();
-
+    adderAutocomplete.bindTo('bounds', map);
     viewModel.showAllMarkers();
 
 
