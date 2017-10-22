@@ -4,7 +4,7 @@ var viewModel = {
   createMarker : function (location) {
     placeInfo = new google.maps.InfoWindow();
     pos = location.location;
-    name = location.title;
+    var name = location.title;
     id = location.id;
     map = map;
     icon = "images/TP.png";
@@ -538,19 +538,22 @@ var viewModel = {
       url: url,
       dataType: 'json',
       success: function(response) {
-        imgsrcs = [];
-        for (i = 0 ; i < response.photos.photo.length; i ++) {
-          pic = response.photos.photo[i];
-          src = "https://farm"+pic.farm+".staticflickr.com/"+pic.server+"/"+pic.id+"_"+pic.secret+".jpg";
-          imgsrcs.push(src);
+        if (response.stat === 'ok') {
+          imgsrcs = [];
+          for (i = 0 ; i < response.photos.photo.length; i ++) {
+            pic = response.photos.photo[i];
+            src = "https://farm"+pic.farm+".staticflickr.com/"+pic.server+"/"+pic.id+"_"+pic.secret+".jpg";
+            imgsrcs.push(src);
+          }
+          viewModel.flickrPhotosArray(imgsrcs);
+        } else {
+          viewModel.flickrPhotosArray([stockImage]);
         }
-        viewModel.flickrPhotosArray(imgsrcs);
       },
       error: function(result) {
         console.log(result);
       }
-    })
-    
+    });
   },
 
   getGoogleImage: function(ref) {
@@ -568,7 +571,7 @@ var viewModel = {
     moreImage = this.getGoogleImage(place.details.photos[0].photo_reference);
     this.detailsImage(moreImage);
     if (place.details.hasOwnProperty("photos")) {
-      detailsImages = "images/clearBrush.png";
+      detailsImages = stockImage;
     }  
     if (place.details.hasOwnProperty("opening_hours")) {
       hours = place.details.opening_hours.weekday_text;

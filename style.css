@@ -276,8 +276,8 @@ li {
     padding: 0;
   }
   #flickrImages {
-    height: 100%;
-    width: auto;
+    width: 100%;
+    height: auto;
   }
   #profileInfo{
     height: 50%;
