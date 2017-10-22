@@ -7,8 +7,6 @@
 	<link rel="stylesheet" href="style.css">
   <script type='text/javascript' src="viewmodel.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script async defer
-     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&callback=initMap&libraries=places,drawing,geometry"></script>
 </head>
 <body>
   <div class="container">
@@ -202,7 +200,6 @@
     var stockImage = "images/noimage.jpg";
    		//initialize map
    		function initMap() {
-
      	  //set map in philadelphia
      	  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.963043409283806, lng:-75.16313552856445},
      		 zoom: 13,
@@ -303,7 +300,6 @@
               });
           }
           map.setCenter(userLocation.position);
-          console.log(userLocation.position.lat(), userLocation.position.lng())
         }//end dropPin
       });//end click-map event listener
 
@@ -376,6 +372,8 @@
   
     ko.applyBindings(viewModel);
      </script>
+  <script async defer
+     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&callback=initMap&libraries=places,drawing,geometry"></script>
 </body>
 </html>
 
