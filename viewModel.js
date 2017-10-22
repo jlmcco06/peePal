@@ -215,7 +215,7 @@ var viewModel = {
   },
   
   addWindowInfo : function (marker, placeInfo){
-    var placeInfo = new google.maps.InfoWindow();
+    placeInfo = new google.maps.InfoWindow();
     if (activeWindow) {
       activeWindow.close();
     }
