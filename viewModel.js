@@ -1,6 +1,7 @@
 // Model defiend below viewModel due to length or entries
 /*global arrayContainer:true, SliderInstance:true, DomObjects:true */
 const viewModel = {
+	//creates marker insatnce from restRooms array
   createMarker : function (location) {
     placeInfo = new google.maps.InfoWindow();
     pos = location.location;
@@ -36,14 +37,15 @@ const viewModel = {
   },
 
   showAllMarkers: function(){
+  	//set all markers visibilility to 'true' when "show all" button clicked
     this.hideAllPopUps();
     for (i = 0; i < model.markers.length; i += 1) {
       model.markers[i].setVisible(true);
     }
-    this.showHiddenBar(true);
   },
 
   hideAllMarkers: function(){
+  	//set all markers visibility to 'false'
     this.showLocationProfile(false);
     if (activeWindow) {
       activeWindow.close();
@@ -51,12 +53,10 @@ const viewModel = {
     directionsDisplay.setMap(null);
     for (i = 0; i < model.markers.length; i += 1) {
       model.markers[i].setVisible(false);
-      this.showHiddenBar(false);
     }
   },
 
   showFindBox: ko.observable(false),
-  showHiddenBar: ko.observable(false),
   showSubmitForm: ko.observable(false),
   showAddBox: ko.observable(false),
   showAddForm: ko.observable(false),
@@ -99,7 +99,6 @@ const viewModel = {
   },
 
   hideAllPopUps: function(){
-    viewModel.showHiddenBar(false);
     viewModel.showFindBox(false);
     viewModel.showAddBox(false);
     viewModel.showAddForm(false);
@@ -116,12 +115,12 @@ const viewModel = {
   findNearest: function(){
     //declare callback function for directions use
     function callback(response, status) {
-      const closestId;
-      const closestPos;
+      const closestId = null;
+      const closestPos = null;
       if (status == "OK") {
         markerDist = response.destinationAddresses;
         matrixResponse = markerDist;
-        const currentDist;
+        const currentDist = null;
         const closest = response.rows[0].elements[0].distance.value;
         for (i = 0; i < markerDist.length; i++) {
           currentDist = response.rows[0].elements[i].distance.value;
