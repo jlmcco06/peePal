@@ -1,15 +1,15 @@
 // Model defiend below viewModel due to length or entries
 /*global arrayContainer:true, SliderInstance:true, DomObjects:true */
-var viewModel = {
+const viewModel = {
   createMarker : function (location) {
     placeInfo = new google.maps.InfoWindow();
     pos = location.location;
-    var name = location.title;
+    const name = location.title;
     id = location.id;
     map = map;
     icon = "images/TP.png";
 
-    var mark = new google.maps.Marker({
+    const mark = new google.maps.Marker({
       id: id,
       position: pos,
       map: map,
@@ -31,7 +31,7 @@ var viewModel = {
   initializeMarkers: function () {
     //iterate over restrooms list to create markers
     for ( i = 0 ; i < model.restRooms.length; i += 1 ) {
-      this.createMarker(model.restRooms[i]);  
+      this.createMarker(model.restRooms[i]);
     }
   },
 
@@ -42,7 +42,7 @@ var viewModel = {
     }
     this.showHiddenBar(true);
   },
-  
+
   hideAllMarkers: function(){
     this.showLocationProfile(false);
     if (activeWindow) {
@@ -116,13 +116,13 @@ var viewModel = {
   findNearest: function(){
     //declare callback function for directions use
     function callback(response, status) {
-      var closestId;
-      var closestPos;
+      const closestId;
+      const closestPos;
       if (status == "OK") {
         markerDist = response.destinationAddresses;
         matrixResponse = markerDist;
-        var currentDist;
-        var closest = response.rows[0].elements[0].distance.value;
+        const currentDist;
+        const closest = response.rows[0].elements[0].distance.value;
         for (i = 0; i < markerDist.length; i++) {
           currentDist = response.rows[0].elements[i].distance.value;
           if (closest >= currentDist) {
@@ -130,13 +130,13 @@ var viewModel = {
             closest = currentDist;
             closestId = model.markers[i].id;
             closestPos = model.markers[i].getPosition();
-          } 
+          }
         }
         viewModel.hideAllMarkers();
         closestLoc.setVisible(true);
         closestLoc.setAnimation(google.maps.Animation.BOUNCE);
         viewModel.displayLocationProfile(closestId);
-        viewModel.displayDirections(userLocation,closestPos); 
+        viewModel.displayDirections(userLocation,closestPos);
       } else if (status == "NOT_FOUND" || status == "ZERO_RESULTS") {
         viewModel.showHiddenMessage("Nope", "Unable to get directions for entered locations");
       }
@@ -144,8 +144,8 @@ var viewModel = {
     // check user location
     if (userLocation) {
       origin = userLocation.getPosition();
-      var dests = [];
-      var distServ = new google.maps.DistanceMatrixService();
+      const dests = [];
+      const distServ = new google.maps.DistanceMatrixService();
       for (i = 0; i < model.markers.length; i += 1) {
         dest = model.markers[i].getPosition();
         dests.push(dest);
@@ -162,7 +162,7 @@ var viewModel = {
   },
 
   getDirections : function() {
-    var current = this.findMarker(currentProfile.id).getPosition();
+    const current = this.findMarker(currentProfile.id).getPosition();
     if (userLocation) {
       this.displayDirections(userLocation, current);
     } else {
@@ -171,15 +171,15 @@ var viewModel = {
   },
 
   showByRating : function(rating) {
-    //remove open circles/directions 
+    //remove open circles/directions
     directionsDisplay.setMap(null);
     if (circle) {
       circle.setMap(null);
     }
     //choose ratings list div and set  it to blank
-    var list = document.getElementById("ratingsFilterList");
+    const list = document.getElementById("ratingsFilterList");
     list.innerHTML = "";
-    //iterate over restrooms and set locations 
+    //iterate over restrooms and set locations
     for (i = 0; i < model.restRooms.length; i += 1) {
       //comapre average rating of locatino to rating choice
       if (model.restRooms[i].avgRating >= rating) {
@@ -195,7 +195,7 @@ var viewModel = {
         list.appendChild(btn);
         viewModel.addListListeners(idnum);
       } else {
-        //set visibility to false if rating is below chasen rating 
+        //set visibility to false if rating is below chasen rating
         viewModel.findMarker(model.restRooms[i].id).setVisible(false);
         }
       if (list.innerHTML === '') {
@@ -214,7 +214,7 @@ var viewModel = {
       }
     }
   },
-  
+
   addWindowInfo : function (marker, placeInfo){
     placeInfo = new google.maps.InfoWindow();
     if (activeWindow) {
@@ -249,8 +249,8 @@ var viewModel = {
   },
 
   displayReviewForm: function() {
-    var box = document.getElementById("addPlaceInfo");
-    var title = document.createElement("h1");
+    const box = document.getElementById("addPlaceInfo");
+    const title = document.createElement("h1");
     title.setAttribute("style", "color: #fdffb7;");
     title.innerHTML = currentProfile.title;
     box.appendChild(title);
@@ -261,11 +261,11 @@ var viewModel = {
 
   submitAddInfo: function() {
     if (addRating) {
-      var match = this.findRestroom(addResult.id);
+      const match = this.findRestroom(addResult.id);
       if (match === null) {
-        var reviewDraft = document.getElementById("addReview").value;
-        var rating = addRating;
-        var newRestroom = {
+        const reviewDraft = document.getElementById("addReview").value;
+        const rating = addRating;
+        const newRestroom = {
           title: addResult.name,
           reviews: [reviewDraft],
           rating: [rating],
@@ -329,7 +329,7 @@ var viewModel = {
       preserveViewport: true
     });
     directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById("directionsBox"));  
+    directionsDisplay.setPanel(document.getElementById("directionsBox"));
     origin = userLocation.getPosition();
     endPoint = destination;
     request = {
@@ -402,7 +402,7 @@ var viewModel = {
       setTimeout(viewModel.hideHiddenMessage, 3000);
       }
   },
-  
+
   hideHiddenMessage: function() {
     viewModel.showAddedMessage(false);
   },
@@ -450,7 +450,7 @@ var viewModel = {
     this.searchWikiInfo(mark.title);
     document.getElementById("moreInfoButton").setAttribute('value', mark.id);
     rating = this.calculateRatingAvg(currentProfile);
-    this.profileRating("Users think it's : " + rating);  
+    this.profileRating("Users think it's : " + rating);
     if (mark.reviews.length < 1) {
       viewModel.reviewsArray(["No reviews for this location yet."]);
     } else {
@@ -499,7 +499,7 @@ var viewModel = {
       } else {
           model.markers[i].setVisible(false);
         }
-    }      
+    }
   },
 
   searchWikiInfo : function(loc) {
@@ -572,7 +572,7 @@ var viewModel = {
     this.detailsImage(moreImage);
     if (place.details.hasOwnProperty("photos")) {
       detailsImages = stockImage;
-    }  
+    }
     if (place.details.hasOwnProperty("opening_hours")) {
       hours = place.details.opening_hours.weekday_text;
       this.hoursArray(hours);
@@ -587,15 +587,15 @@ var viewModel = {
   }
 };
 
-var model = {
+const model = {
       markers : [],
-      restRooms : [ 
-        {title: "Whole Foods Market", 
-        reviews: ["Pretty high-traffic, but kept realitvely clean for how busy this store can get!", "Only two stalls, so there's usually a line."], 
-        rating: [4,5,4,3], 
-        avgRating: 4, 
-        location: { lat: 39.9629464, lng : -75.17414529999996}, 
-        id: "24ad245c83f8bf1b6aca44fa537788135b6d4320", 
+      restRooms : [
+        {title: "Whole Foods Market",
+        reviews: ["Pretty high-traffic, but kept realitvely clean for how busy this store can get!", "Only two stalls, so there's usually a line."],
+        rating: [4,5,4,3],
+        avgRating: 4,
+        location: { lat: 39.9629464, lng : -75.17414529999996},
+        id: "24ad245c83f8bf1b6aca44fa537788135b6d4320",
         details: {
           "address_components" : [
          {
@@ -899,12 +899,12 @@ var model = {
    },
    "status" : "OK"
 },
-        {title: "Barnes and Noble", 
-        reviews: [], 
-        rating: [3,2,3,4], 
-        avgRating: 3, 
-        location: {lat : 39.9503388,lng : -75.17100569999999}, 
-        id: "5c8cf4e4da45ca5937b91d9eebf98b4686a98dcb", 
+        {title: "Barnes and Noble",
+        reviews: [],
+        rating: [3,2,3,4],
+        avgRating: 3,
+        location: {lat : 39.9503388,lng : -75.17100569999999},
+        id: "5c8cf4e4da45ca5937b91d9eebf98b4686a98dcb",
         details: {
       "address_components" : [
          {
@@ -1515,12 +1515,12 @@ var model = {
    },
    "status" : "OK"
 },
-        {title: "National Constitution Center", 
-        reviews: [], 
-        rating: [5,4,5,5], 
+        {title: "National Constitution Center",
+        reviews: [],
+        rating: [5,4,5,5],
         avgRating: 4.75,
-        location: { lat: 39.9538916, lng : -75.14906559999997}, 
-        id: "c0fe170c2579a8d23f42bb3bc002ebe064d5096b", 
+        location: { lat: 39.9538916, lng : -75.14906559999997},
+        id: "c0fe170c2579a8d23f42bb3bc002ebe064d5096b",
         details: {
       "address_components" : [
          {
@@ -1817,12 +1817,12 @@ var model = {
    },
    "status" : "OK"
 },
-        {title: "Comcast Center", 
-        reviews: [], 
-        rating: [4,4,4,5], 
+        {title: "Comcast Center",
+        reviews: [],
+        rating: [4,4,4,5],
         avgRating: 4.25,
-        location: {lat : 39.9547,lng : -75.1686}, 
-        id: "66ee5ee74877c366b0ec0147ae4d725dd5403d87", 
+        location: {lat : 39.9547,lng : -75.1686},
+        id: "66ee5ee74877c366b0ec0147ae4d725dd5403d87",
         details: {
       "address_components" : [
          {
@@ -1974,12 +1974,12 @@ var model = {
    },
    "status" : "OK"
 },
-        {title: "ACME Markets", 
-        reviews: [], 
-        rating: [2,3,2,3], 
+        {title: "ACME Markets",
+        reviews: [],
+        rating: [2,3,2,3],
         avgRating: 2.5,
-        location: { lat: 39.932301, lng : -75.16229729999998}, 
-        id: "ab22481ebd79af79ec4e19061a36017565e8e0fb", 
+        location: { lat: 39.932301, lng : -75.16229729999998},
+        id: "ab22481ebd79af79ec4e19061a36017565e8e0fb",
         details: {
       "address_components" : [
          {
