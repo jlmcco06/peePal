@@ -1,16 +1,226 @@
 // Model defiend below viewModel due to length or entries
-/*global arrayContainer:true, SliderInstance:true, DomObjects:true */
-const viewModel = {
+/*global arrayContainer:true, SliderInstance:true, DomObjects:true *//*global arrayContainer:true, DomObjects:true */
+//INITIALIZE MAP
+
+// Create global user instance variables
+var userLocation = null;
+var findResult = null;
+var addMarker = null;
+var origin = null;
+var directionsDisplay;
+var map;
+var addRating = null;
+var addResult = null;
+var addDetails = null;
+var currentProfile = null;
+var matrixResponse = null;
+var closestLoc = null;
+var circle = null;
+var activeWindow = null;
+var hours = null;
+var moreImage = null;
+var stockImage = "images/noimage.jpg";
+
+//initialize map
+function initMap() {
+  //create styling for map
+  var styles = [
+    {
+      elementType: 'geometry',
+      stylers: [{color: '#5d6e87'}]},
+    {
+      elementType: 'labels.text.stroke',
+      stylers: [{color: '#242f3e'}],
+    },
+    {
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#fdffb7'}]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{color: '#233044'}]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{color: '#dbf4d0'}]
+    },
+    {
+      featureType: 'poi.business',
+      stylers: [{visibility: 'off'}]
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{color: '#f7c5da'}]
+    }]
+
+  //set map in philadelphia
+  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.963043409283806, lng:-75.16313552856445},
+    zoom: 13,
+    disableDefaultUI: true,
+    styles: styles
+  });
+
+  var places = new google.maps.places.PlacesService(map);
+  var placeInfo = new google.maps.InfoWindow();
+  var directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.CIRCLE,
+    drawingControl: true,
+    drawingControlOptions: {
+    position: google.maps.ControlPosition.TOP_CENTER,
+    drawingModes: [
+    google.maps.drawing.OverlayType.CIRCLE]}
+  });
+
+  drawingManager.addListener('overlaycomplete', function(event) {
+    viewModel.showEraseCircle(true);
+    viewModel.hideAllMarkers();
+    if (circle) {
+      circle.setMap(null);
+      hideListings(markers);
+    }
+    // Stop drawing mode
+    drawingManager.setDrawingMode(null);
+    circle = event.overlay;
+    circle.setEditable(true);
+    // Search within
+    viewModel.searchArea();
+    // re-check if boudries/center change
+    google.maps.event.addListener(circle, 'radius_changed', function(){
+      viewModel.searchArea();
+    });
+    google.maps.event.addListener(circle, 'center_changed', function(){
+      viewModel.searchArea();
+    });
+  });
+
+  document.getElementById('drawFiltersButton').addEventListener('click', function() {
+    setDrawingMap(drawingManager);
+  });
+
+  function setDrawingMap() {
+    if (drawingManager.map) {
+      drawingManager.setMap(null);
+    } else {
+      drawingManager.setMap(map);
+    }
+  }
+
+  //add listener to map to create pin drop at user location
+  google.maps.event.addListener(map,'click', function(event) {
+    dropPin(event.latLng);
+
+    //drop pin in user location
+    function dropPin(location) {
+      if (circle) {
+        circle.setMap(null);
+      }
+      viewModel.hideAllPopUps();
+      viewModel.showFiltersBar(true);
+      if (placeInfo) {
+        placeInfo.close();
+      }
+      icon = 'images/youAreHere.png';
+      if (addMarker) {
+        addMarker.setVisible(false);
+      }
+      if (userLocation) {
+        userLocation.setPosition(location);
+        userLocation.setVisible(true);
+      } else if (findResult) {
+        findResult = location;
+      } else {
+        userLocation = new google.maps.Marker(
+          {title: "Your location",
+          position: location,
+          map: map,
+          draggable: false,
+          visible: true,
+          icon: icon
+        });
+      }
+      map.setCenter(userLocation.position);
+    }//end dropPin
+  });//end click-map event listener
+
+  //add autocomplete to finderbox
+
+  var finderInput = document.getElementById('locationBox');
+
+  var finderAutocomplete = new google.maps.places.Autocomplete(finderInput);
+
+  finderAutocomplete.bindTo('bounds', map);
+
+  finderAutocomplete.addListener('place_changed', function(){
+    directionsDisplay.setMap(null);
+    icon = 'images/youAreHere.png';
+    findResult = finderAutocomplete.getPlace();
+    findLoc = findResult.geometry.location;
+    if (addMarker) {
+      addMarker.setVisible(false);
+    }
+    if (userLocation) {
+      userLocation.setPosition(findLoc);
+      userLocation.setVisible(true);
+      viewModel.findNearest(userLocation);
+    } else {
+      userLocation = new google.maps.Marker(
+      {
+        title: "Your Location",
+        position: findLoc,
+        map: map,
+        draggable:false,
+        visible:true,
+        icon: icon
+      });
+      map.setCenter(findLoc);
+    }
+  });//end finder autocomplete
+
+  //add autocomplete to adder box
+  var adderInput = document.getElementById('addLocationBox');
+  var adderAutocomplete = new google.maps.places.Autocomplete(adderInput);
+
+  adderAutocomplete.addListener('place_changed', function(){
+    directionsDisplay.setMap(null);
+    viewModel.hideAllMarkers();
+    if (userLocation) {
+      userLocation.setVisible(false);
+    }
+    addResult = adderAutocomplete.getPlace();
+    addLoc = addResult.geometry.location;
+    addMarker = new google.maps.Marker(
+      {title: addResult.name,
+      position: addLoc,
+      map: map,
+      draggable:false,
+      visible:true,
+      });
+    map.setCenter(addLoc);
+    addDetails = adderAutocomplete.getPlace();
+  });//end adder autocopmlete
+
+  adderAutocomplete.bindTo('bounds', map);
+  directionsDisplay.setMap(map);
+  viewModel.initializeMarkers();
+  viewModel.showAllMarkers();
+}//end of initialize map function
+
+var viewModel = {
 	//creates marker insatnce from restRooms array
   createMarker : function (location) {
     placeInfo = new google.maps.InfoWindow();
     pos = location.location;
-    const name = location.title;
+    var name = location.title;
     id = location.id;
     map = map;
     icon = "images/TP.png";
 
-    const mark = new google.maps.Marker({
+    var mark = new google.maps.Marker({
       id: id,
       position: pos,
       map: map,
@@ -107,21 +317,21 @@ const viewModel = {
     viewModel.showAddedMessage(false);
     viewModel.showReviewForm(false);
     viewModel.showDirections(false);
-    directionsDisplay.setMap(null);
     viewModel.showFiltersBar(false);
     viewModel.showRatingsFilter(false);
+    directionsDisplay.setMap(null);
   },
 
   findNearest: function(){
     //declare callback function for directions use
     function callback(response, status) {
-      const closestId = null;
-      const closestPos = null;
+      var closestId = null;
+      var closestPos = null;
       if (status == "OK") {
         markerDist = response.destinationAddresses;
         matrixResponse = markerDist;
-        const currentDist = null;
-        const closest = response.rows[0].elements[0].distance.value;
+        var currentDist = null;
+        var closest = response.rows[0].elements[0].distance.value;
         for (i = 0; i < markerDist.length; i++) {
           currentDist = response.rows[0].elements[i].distance.value;
           if (closest >= currentDist) {
@@ -143,8 +353,8 @@ const viewModel = {
     // check user location
     if (userLocation) {
       origin = userLocation.getPosition();
-      const dests = [];
-      const distServ = new google.maps.DistanceMatrixService();
+      var dests = [];
+      var distServ = new google.maps.DistanceMatrixService();
       for (i = 0; i < model.markers.length; i += 1) {
         dest = model.markers[i].getPosition();
         dests.push(dest);
@@ -161,7 +371,7 @@ const viewModel = {
   },
 
   getDirections : function() {
-    const current = this.findMarker(currentProfile.id).getPosition();
+    var current = this.findMarker(currentProfile.id).getPosition();
     if (userLocation) {
       this.displayDirections(userLocation, current);
     } else {
@@ -176,7 +386,7 @@ const viewModel = {
       circle.setMap(null);
     }
     //choose ratings list div and set  it to blank
-    const list = document.getElementById("ratingsFilterList");
+    var list = document.getElementById("ratingsFilterList");
     list.innerHTML = "";
     //iterate over restrooms and set locations
     for (i = 0; i < model.restRooms.length; i += 1) {
@@ -214,6 +424,13 @@ const viewModel = {
     }
   },
 
+  listLocations : function() {
+    this.restroomsArray(model.restRooms);
+    directionsDisplay.setMap(null);
+    this.hideAllPopUps();
+    this.showLocationsList(true);
+  },
+
   addWindowInfo : function (marker, placeInfo){
     placeInfo = new google.maps.InfoWindow();
     if (activeWindow) {
@@ -248,8 +465,8 @@ const viewModel = {
   },
 
   displayReviewForm: function() {
-    const box = document.getElementById("addPlaceInfo");
-    const title = document.createElement("h1");
+    var box = document.getElementById("addPlaceInfo");
+    var title = document.createElement("h1");
     title.setAttribute("style", "color: #fdffb7;");
     title.innerHTML = currentProfile.title;
     box.appendChild(title);
@@ -260,11 +477,11 @@ const viewModel = {
 
   submitAddInfo: function() {
     if (addRating) {
-      const match = this.findRestroom(addResult.id);
+      var match = this.findRestroom(addResult.id);
       if (match === null) {
-        const reviewDraft = document.getElementById("addReview").value;
-        const rating = addRating;
-        const newRestroom = {
+        var reviewDraft = document.getElementById("addReview").value;
+        var rating = addRating;
+        var newRestroom = {
           title: addResult.name,
           reviews: [reviewDraft],
           rating: [rating],
@@ -350,13 +567,6 @@ const viewModel = {
     addRating = rating;
   },
 
-  listLocations : function() {
-    this.restroomsArray(model.restRooms);
-    directionsDisplay.setMap(null);
-    this.hideAllPopUps();
-    this.showLocationsList(true);
-  },
-
   getProfile : function (location) {
     viewModel.displayLocationProfile(location.id);
   },
@@ -440,9 +650,9 @@ const viewModel = {
   },
 
   displayLocationProfile : function(id) {
+    mark = this.findRestroom(id);
     this.showDirections(false);
     this.showLocationProfile(true);
-    mark = this.findRestroom(id);
     this.getFlickrImage(mark.title);
     currentProfile = mark;
     this.profileName(mark.title);
@@ -455,6 +665,11 @@ const viewModel = {
     } else {
         viewModel.reviewsArray(mark.reviews);
     }
+    for (i = 0; i < model.markers.length ; i++) {
+      model.markers[i].setAnimation(null);
+    }
+    marker = this.findMarker(id);
+    marker.setAnimation(google.maps.Animation.BOUNCE);
   },
 
   findRestroom : function(id) {
@@ -586,7 +801,7 @@ const viewModel = {
   }
 };
 
-const model = {
+var model = {
       markers : [],
       restRooms : [
         {title: "Whole Foods Market",
