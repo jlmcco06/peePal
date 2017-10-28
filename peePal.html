@@ -15,63 +15,63 @@
   <!-- container for all visible body elements -->
   <div class="container">
     <!--add map -->
-    <div id="map"></div>
+    <div class="map" id="map"></div>
     <!--toolbar for logo and userlocation search bar -->
-    <div id="toolbar">
+    <div class="toolbar">
       <!--logo container-->
-      <div id="logo">
+      <div class="logo">
         <h1>PeePal</h1>
       </div>
       <!-- Userlocation searchbox container-->
-      <div id="userLocBox">
-        <input id="locationBox" type="text" placeholder="  Enter your location, or click your location on the map to drop a pin">
+      <div class="userLocBox">
+        <input class="locationBox" id="locationBox" type="text" placeholder="  Enter your location, or click your location on the map to drop a pin">
       </div>
     </div> <!--end of toolbar-->
     <!--Search tools conatiner-->
-    <div id="tools">
-      <button class="button" data-bind="click: displayFiltersBar" id="find">Find</button>
-      <button class="button" data-bind="click: displayAddBox" id="add">Add</button>
-      <button class="button" data-bind="click: showAllMarkers" id="showAll">Show All</button>
-      <button class="button" data-bind="click: listLocations" id="list">List</button>
+    <div class="tools">
+      <button class="button" data-bind="click: displayFiltersBar">Find</button>
+      <button class="button" data-bind="click: displayAddBox">Add</button>
+      <button class="button" data-bind="click: showAllMarkers">Show All</button>
+      <button class="button" data-bind="click: listLocations">List</button>
     </div> <!--end search tools container-->
     <!--Begin filters bar. Section for Find, Draw Search Area, Show by Rating, and Hide All buttons-->
-    <div id="hiddenFiltersBar" data-bind="visible: showFiltersBar">
-      <button class="filterButton" data-bind="click: findNearest" id="filtersButton">Find Nearest </button>
+    <div class="hiddenFiltersBar" data-bind="visible: showFiltersBar">
+      <button class="filterButton" data-bind="click: findNearest">Find Nearest </button>
       <button class="filterButton" data-bind="click: setDrawingMap" id="drawFiltersButton">Draw search area</button>
-      <button class="filterButton" data-bind="click: showRatingsFilter" id="filtersButton">Show by rating</button>
-      <button class="filterButton" data-bind="click: hideAllMarkers" id="hideButton"> Hide All</button>
+      <button class="filterButton" data-bind="click: showRatingsFilter">Show by rating</button>
+      <button class="filterButton" data-bind="click: hideAllMarkers"> Hide All</button>
     </div><!--end filters bar-->
     <!--Begin add location bar with Add Location search box and add button-->
-    <div id="hiddenAddLocationBox" data-Bind="visible: showAddBox">
-      <div id="addBoxContainer"><!--Using containers for box and button to solve formatting issues-->
-        <input id="addLocationBox" type="text" onfocus="viewModel.clearField(this)" placeholder="Enter the location you would like to add">
+    <div class="hiddenAddLocationBox" data-Bind="visible: showAddBox">
+      <div class="addBoxContainer"><!--Using containers for box and button to solve formatting issues-->
+        <input class="addLocationBox" id="addLocationBox" type="text" onfocus="viewModel.clearField(this)" placeholder="Enter the location you would like to add">
       </div>
-      <div id="addButtonContainer">
-        <button id ="addButton" class="button" data-bind="click: displayAddForm">Add</button>
+      <div class="addButtonContainer">
+        <button class="button" data-bind="click: displayAddForm">Add</button>
       </div>
     </div><!--end Add Location bar-->
     <!--Adding bar to display inner site error messages-->
-    <div id="hiddenMessageBar" data-bind="visible: showAddedMessage">
-      <div id="hiddenMessage" data-bind="text : showMessage"></div>
+    <div class="hiddenMessageBar" id="hiddenMessageBar" data-bind="visible: showAddedMessage">
+      <div class="hiddenMessage" data-bind="text : showMessage"></div>
     </div><!-- end of message bar-->
     <!--Ratings filter container for toilet brush images-->
-    <div id="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
-      <div id="ratingsFilterList">
+    <div class="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
+      <div class="ratingsFilterList" id="ratingsFilterList">
         <!--Location list of places with chosen user rating or-->
-        <div id="ratingsFilterList" data-bind="visible: showLocationsList">
-          <button class="button" data-bind="click: hideList" id="listCloseButton">X</button>
+        <div class="ratingsFilterList" data-bind="visible: showLocationsList">
+          <button class="listCloseButton" data-bind="click: hideList">X</button>
           <br>
-          <ul class="restroomList" id="restrooms" data-bind="foreach : restroomsArray">
+          <ul class="restroomList" data-bind="foreach : restroomsArray">
             <li>
-              <button class="button" id="listItem" data-bind="event : { click: $parent.getProfile }">
-                <span id="listItemName" data-bind="text: title"></span>
+              <button class="listItem" data-bind="event : { click: $parent.getProfile }">
+                <span class="listItemName" data-bind="text: title"></span>
               </button>
             </li>
           </ul>
       </div><!--end of ratings filter list-->
 
       </div>
-      <div id="hiddenRatingsFilter">
+      <div class="hiddenRatingsFilter">
         Clean
         <img id="5" src="images/blackBrush.png" alt="Clean" data-bind="click : showByRating.bind($data, '5')">
         <img id="4" src="images/blackBrush.png" alt="Kinda Clean" data-bind="click : showByRating.bind($data, '4')">
@@ -82,93 +82,93 @@
       </div>
     </div><!--end ratings filter container-->
     <!--Add location form which is displayed when user clicks "add" button in add location section-->
-    <div id="hiddenAddForm" data-bind="visible: showAddForm">
-        <div id="addPlaceInfo"></div>
+    <div class="hiddenAddForm" id="hiddenReviewForm" data-bind="visible: showAddForm">
+        <div class="addPlaceInfo" id="addPlaceInfo"></div>
         <textarea class="reviewBox" id="addReview" placeholder="Write a review of this restroom here!"></textarea>
-        <div id="reviewButtons">
+        <div class="reviewButtons" id="reviewButtons">
           <button id="gross" data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
           <button id="kindaGross" data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
           <button id="fine" data-bind="click : setAddRating.bind($data, '3')" class="reviewbutton">Fine</button>
           <button id="kindaClean" data-bind="click : setAddRating.bind($data, '4')" class="reviewbutton">Kinda clean</button>
           <button id="clean" data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
         </div>
-        <div id="hiddenSubmitFormButton" data-bind="visible: showSubmitForm">
-      <button class="submitBarButton" data-bind="click: submitAddInfo" id="submitFormButton">Submit</button>
-      <button class="submitBarButton" data-bind="click: hideAllPopUps" id="submitFormButton">Cancel</button>
+        <div class="hiddenSubmitFormButton" id="hiddenSubmitFormButton" data-bind="visible: showSubmitForm">
+      <button class="submitBarButton" data-bind="click: submitAddInfo">Submit</button>
+      <button class="submitBarButton" data-bind="click: hideAllPopUps">Cancel</button>
     </div>
     </div><!--end of add form container-->
     <!--Location list which is displayed when user clicks "List" button from toolbar-->
-    <div id="hiddenLocationsList" data-bind="visible: showLocationsList">
+    <div class="hiddenLocationsList" id="hiddenLocationsList" data-bind="visible: showLocationsList">
       <button class="button" data-bind="click: hideList" id="listCloseButton">X</button>
       <br>
       <ul class="restroomList" id="restrooms" data-bind="foreach : restroomsArray">
         <li>
           <button class="button" id="listItem" data-bind="event : { click: $parent.getProfile }">
-            <span id="listItemName" data-bind="text: title"></span>
+            <span class="listItemName" data-bind="text: title"></span>
           </button>
         </li>
       </ul>
     </div><!--end of location list-->
     <!--Location profile displayed when user clicks location icon on the map, or any button showing the name of the location-->
-    <div id="hiddenLocationProfile" data-bind="visible: showLocationProfile">
+    <div class="hiddenLocationProfile" id="hiddenLocationProfile" data-bind="visible: showLocationProfile">
       <button class="button" data-bind="click: hideProfile" id="profileCloseButton">X</button>
       <br>
       Images from Flickr
-      <div id="images">
-        <ul id="profileImagesContainer" data-bind="foreach : flickrPhotosArray">
-          <img id="flickrImages" data-bind="attr: {src: $data, alt: stockImage}">
+      <div class="images">
+        <ul class="profileImagesContainer" data-bind="foreach : flickrPhotosArray">
+          <img class="flickrImages" data-bind="attr: {src: $data, alt: stockImage}">
         </ul>
       </div>
-      <div id="profileInfo">
-        <div id="profileName" data-bind="text: profileName"></div>
+      <div class="profileInfo">
+        <div class="profileName" data-bind="text: profileName"></div>
         <br>
-        <div id="profileRating" data-bind="text: profileRating"></div>
+        <div class="profileRating" data-bind="text: profileRating"></div>
         <br>
         <h3>Information from Wikipedia</h3>
-        <p id="wikiInfo" data-Bind="text : profileWiki"></p>
-        <div id="wikiButton">
+        <p class="wikiInfo" data-Bind="text : profileWiki"></p>
+        <div class="wikiButton">
           <br>
-          <a class="button" data-bind="attr: {href: wikiLink}" id="wikiLinkButton">Visit Wikipedia Page</a>
+          <a class="button" data-bind="attr: {href: wikiLink}">Visit Wikipedia Page</a>
           <br>
         </div>
-      <div id="profileButtonsContainer">
-        <button class="button" id="rateReviewButton" data-bind="click: displayReviewForm"> Review </button>
+      <div class="profileButtonsContainer">
+        <button class="button" data-bind="click: displayReviewForm"> Review </button>
         <button class="button" id="moreInfoButton" data-bind="click: displayMoreInfo"> More info </button>
-        <button class="button" id="showDirectionsButton" data-bind="click: getDirections">Directions </button>
+        <button class="button" data-bind="click: getDirections">Directions </button>
       </div>
     </div>
-      <div id="directionsContainer" data-bind="visible: showDirections">
-        <div id="directionsBox"></div>
+      <div class="directionsContainer" data-bind="visible: showDirections">
+        <div class="directionsBox" id="directionsBox"></div>
       </div>
     </div><!--end of location profile-->
     <!--Beginning of review form container, triggered when a user clicks the "Review" button on the location proflie-->
-      <div id="hiddenReviewForm" data-bind="visible: showReviewForm">
+      <div class="hiddenReviewForm" id="hiddenReviewForm" data-bind="visible: showReviewForm">
         <br>
         <textarea class="reviewBox" id="revReview" placeholder="Write a review of this restroom here!"></textarea>
-        <div id="reviewButtons">
-          <button id="revGross" data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
-          <button id="revKindaGross" data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
-          <button id="revFine" data-bind="click : setAddRating.bind($data, '3')" class="reviewbutton">Fine</button>
-          <button id="revKindaClean" data-bind="click : setAddRating.bind($data, '4')" class="reviewbutton">Kinda clean</button>
-          <button id="revClean" data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
+        <div class="reviewButtons">
+          <button data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
+          <button data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
+          <button data-bind="click : setAddRating.bind($data, '3')" class="reviewbutton">Fine</button>
+          <button data-bind="click : setAddRating.bind($data, '4')" class="reviewbutton">Kinda clean</button>
+          <button data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
         </div>
-        <div id="hiddenSubmitFormButton" data-bind="visible: showReviewForm">
+        <div class="hiddenSubmitFormButton" data-bind="visible: showReviewForm">
         <button class="submitBarButton" data-bind="click: submitReviewInfo" id="submitFormButton">Submit</button>
         <button class="submitBarButton" data-bind="click: hideReviewForm" id="submitFormButton">Cancel</button>
         </div>
       </div><!-- end review form-->
       <!--Begins more info container, triggered when user clicks "More Info" button-->
-      <div id="moreInfoContainer" data-bind="visible: showMoreInfo">
+      <div class="moreInfoContainer" data-bind="visible: showMoreInfo">
         <button class="button" data-bind="click: hideMoreInfo" id="moreInfoCloseButton">X</button>
-        <img id="profileImage"data-bind="attr: {src: detailsImage, alt: stockImage}" >
+        <img class="profileImage" data-bind="attr: {src: detailsImage, alt: stockImage}">
         <h2 data-bind="text : profileName"></h2>
         <span data-bind="text : profileAddress"></span>
-        <ul id="hoursList" data-bind="foreach : hoursArray">
-          <li id="hour" data-bind="text: $data"></li>
+        <ul class="hoursList" data-bind="foreach : hoursArray">
+          <li class="hour" data-bind="text: $data"></li>
         </ul>
         <p> Here's what some people are saying:</p>
-        <ul id="profileReviews" data-bind=" foreach : reviewsArray">
-          <li id="review" data-bind=" text: $data"></li>
+        <ul class="profileReviews" data-bind=" foreach : reviewsArray">
+          <li class="review" data-bind=" text: $data"></li>
         </ul>
       </div>
   </div>
