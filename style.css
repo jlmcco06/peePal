@@ -90,9 +90,9 @@ li {
 
 .hiddenFiltersBar {
   width: 98%;
-  height: 5%;
+  height: 3%;
   background-color: #36455e;
-  padding-bottom: 1%;
+  padding-bottom: 0.5%;
   padding-left: 2%;
   position: relative;
   opacity: .9;
@@ -102,15 +102,20 @@ li {
     .filterButton {
       background-color: #36455e;
       color: #fdffb7;
-      font-size: 1em;
+      font-size: 0.9em;
       border: none;
       text-align: center;
       max-height: 95%;
       width: 22%;
+      border-radius: 0.75em;
+      padding: 0.9em;
+    }
+    .filterButton:hover {
+      background-color: #233044;
     }
       .ratingsFilterContainer {
         width: 30%;
-        height: 65%;
+        height: 55%;
         background-color: #36455e;
         padding-bottom: 1%;
         padding-left: 1%;
@@ -245,7 +250,7 @@ li {
   overflow: auto;
   left: 78%;
 }
-  .listItem {
+  #listItem {
     font-size: 100%;
     width: 90%;
   }
@@ -315,9 +320,9 @@ li {
     width: 100%;
     display: block;
   }
-    .rateReviewButton,
-    .moreInfoButton,
-    .showDirectionsButton {
+    #review-btn,
+    #moreInfoButton,
+    #directions-btn {
       width: 30%;
     }
     /* Covers directions pop-up */
