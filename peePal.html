@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>PeePal</title>
   <meta charset="utf-8">
@@ -9,52 +10,78 @@
   <script src="viewmodel.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+
 <body>
+  <!-- container for all visible body elements -->
   <div class="container">
+    <!--add map -->
     <div id="map"></div>
+    <!--toolbar for logo and userlocation search bar -->
     <div id="toolbar">
+      <!--logo container-->
       <div id="logo">
         <h1>PeePal</h1>
       </div>
+      <!-- Userlocation searchbox container-->
       <div id="userLocBox">
         <input id="locationBox" type="text" placeholder="  Enter your location, or click your location on the map to drop a pin">
       </div>
-    </div>
+    </div> <!--end of toolbar-->
+    <!--Search tools conatiner-->
     <div id="tools">
-        <button class='button' data-bind="click: displayFiltersBar" id='find'>Find</button>
-        <button class='button' data-bind='click: displayAddBox' id='add'>Add</button>
-        <button class='button' data-bind="click: showAllMarkers" id='showAll'>Show All</button>
-        <button class='button' data-bind="click: listLocations" id='list'>List</button>
-    </div>
-    <div id='hiddenAddLocationBox' data-Bind='visible: showAddBox'>
-      <div id="addBoxContainer">
+      <button class="button" data-bind="click: displayFiltersBar" id="find">Find</button>
+      <button class="button" data-bind="click: displayAddBox" id="add">Add</button>
+      <button class="button" data-bind="click: showAllMarkers" id="showAll">Show All</button>
+      <button class="button" data-bind="click: listLocations" id="list">List</button>
+    </div> <!--end search tools container-->
+    <!--Begin filters bar. Section for Find, Draw Search Area, Show by Rating, and Hide All buttons-->
+    <div id="hiddenFiltersBar" data-bind="visible: showFiltersBar">
+      <button class="filterButton" data-bind="click: findNearest" id="filtersButton">Find Nearest </button>
+      <button class="filterButton" data-bind="click: setDrawingMap" id="drawFiltersButton">Draw search area</button>
+      <button class="filterButton" data-bind="click: showRatingsFilter" id="filtersButton">Show by rating</button>
+      <button class="filterButton" data-bind="click: hideAllMarkers" id="hideButton"> Hide All</button>
+    </div><!--end filters bar-->
+    <!--Begin add location bar with Add Location search box and add button-->
+    <div id="hiddenAddLocationBox" data-Bind="visible: showAddBox">
+      <div id="addBoxContainer"><!--Using containers for box and button to solve formatting issues-->
         <input id="addLocationBox" type="text" onfocus="viewModel.clearField(this)" placeholder="Enter the location you would like to add">
       </div>
       <div id="addButtonContainer">
         <button id ="addButton" class="button" data-bind="click: displayAddForm">Add</button>
       </div>
-    </div>
-    <div id="hiddenFiltersBar" data-bind='visible: showFiltersBar'>
-      <button class='filterButton' data-bind="click: findNearest" id='filtersButton'>Find Nearest </button>
-      <button class='filterButton' data-bind='click: setDrawingMap' id='drawFiltersButton'>Draw search area</button>
-      <button class='filterButton' data-bind="click: showRatingsFilter" id='filtersButton'>Show by rating</button>
-      <button class='filterButton' data-bind='click: hideAllMarkers' id='hideButton'> Hide All</button>
-    </div>
+    </div><!--end Add Location bar-->
+    <!--Adding bar to display inner site error messages-->
     <div id="hiddenMessageBar" data-bind="visible: showAddedMessage">
       <div id="hiddenMessage" data-bind="text : showMessage"></div>
-    </div>
+    </div><!-- end of message bar-->
+    <!--Ratings filter container for toilet brush images-->
     <div id="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
-      <div id="ratingsFilterList"> Choose a rating level </div>
+      <div id="ratingsFilterList">
+        <!--Location list of places with chosen user rating or-->
+        <div id="ratingsFilterList" data-bind="visible: showLocationsList">
+          <button class="button" data-bind="click: hideList" id="listCloseButton">X</button>
+          <br>
+          <ul class="restroomList" id="restrooms" data-bind="foreach : restroomsArray">
+            <li>
+              <button class="button" id="listItem" data-bind="event : { click: $parent.getProfile }">
+                <span id="listItemName" data-bind="text: title"></span>
+              </button>
+            </li>
+          </ul>
+      </div><!--end of ratings filter list-->
+
+      </div>
       <div id="hiddenRatingsFilter">
         Clean
-        <img id="5" src="images/blackBrush.png" data-bind="click : showByRating.bind($data, '5')">
-        <img id="4" src="images/blackBrush.png" data-bind="click : showByRating.bind($data, '4')">
-        <img id="3" src="images/blackBrush.png" data-bind="click : showByRating.bind($data, '3')">
-        <img id="2" src="images/blackBrush.png" data-bind="click : showByRating.bind($data, '2')">
-        <img id="1" src="images/blackBrush.png" data-bind="click : showByRating.bind($data, '1')">
+        <img id="5" src="images/blackBrush.png" alt="Clean" data-bind="click : showByRating.bind($data, '5')">
+        <img id="4" src="images/blackBrush.png" alt="Kinda Clean" data-bind="click : showByRating.bind($data, '4')">
+        <img id="3" src="images/blackBrush.png" alt="Fine" data-bind="click : showByRating.bind($data, '3')">
+        <img id="2" src="images/blackBrush.png" alt="Kinda Gross" data-bind="click : showByRating.bind($data, '2')">
+        <img id="1" src="images/blackBrush.png" alt="Gross" data-bind="click : showByRating.bind($data, '1')">
         Gross
       </div>
-    </div>
+    </div><!--end ratings filter container-->
+    <!--Add location form which is displayed when user clicks "add" button in add location section-->
     <div id="hiddenAddForm" data-bind="visible: showAddForm">
         <div id="addPlaceInfo"></div>
         <textarea class="reviewBox" id="addReview" placeholder="Write a review of this restroom here!"></textarea>
@@ -66,12 +93,13 @@
           <button id="clean" data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
         </div>
         <div id="hiddenSubmitFormButton" data-bind="visible: showSubmitForm">
-      <button class="submitBarButton" data-bind='click: submitAddInfo' id="submitFormButton">Submit</button>
-      <button class="submitBarButton" data-bind='click: hideAllPopUps' id="submitFormButton">Cancel</button>
+      <button class="submitBarButton" data-bind="click: submitAddInfo" id="submitFormButton">Submit</button>
+      <button class="submitBarButton" data-bind="click: hideAllPopUps" id="submitFormButton">Cancel</button>
     </div>
-    </div>
+    </div><!--end of add form container-->
+    <!--Location list which is displayed when user clicks "List" button from toolbar-->
     <div id="hiddenLocationsList" data-bind="visible: showLocationsList">
-      <button class='button' data-bind='click: hideList' id='listCloseButton'>X</button>
+      <button class="button" data-bind="click: hideList" id="listCloseButton">X</button>
       <br>
       <ul class="restroomList" id="restrooms" data-bind="foreach : restroomsArray">
         <li>
@@ -80,9 +108,10 @@
           </button>
         </li>
       </ul>
-    </div>
+    </div><!--end of location list-->
+    <!--Location profile displayed when user clicks location icon on the map, or any button showing the name of the location-->
     <div id="hiddenLocationProfile" data-bind="visible: showLocationProfile">
-      <button class='button' data-bind='click: hideProfile' id='profileCloseButton'>X</button>
+      <button class="button" data-bind="click: hideProfile" id="profileCloseButton">X</button>
       <br>
       Images from Flickr
       <div id="images">
@@ -111,8 +140,9 @@
       <div id="directionsContainer" data-bind="visible: showDirections">
         <div id="directionsBox"></div>
       </div>
-    </div>
-    <div id="hiddenReviewForm" data-bind="visible: showReviewForm">
+    </div><!--end of location profile-->
+    <!--Beginning of review form container, triggered when a user clicks the "Review" button on the location proflie-->
+      <div id="hiddenReviewForm" data-bind="visible: showReviewForm">
         <br>
         <textarea class="reviewBox" id="revReview" placeholder="Write a review of this restroom here!"></textarea>
         <div id="reviewButtons">
@@ -123,254 +153,27 @@
           <button id="revClean" data-bind="click : setAddRating.bind($data, '5')" class="reviewbutton">Clean!</button>
         </div>
         <div id="hiddenSubmitFormButton" data-bind="visible: showReviewForm">
-      <button class="submitBarButton" data-bind='click: submitReviewInfo' id="submitFormButton">Submit</button>
-      <button class="submitBarButton" data-bind='click: hideReviewForm' id="submitFormButton">Cancel</button>
-    </div>
+        <button class="submitBarButton" data-bind="click: submitReviewInfo" id="submitFormButton">Submit</button>
+        <button class="submitBarButton" data-bind="click: hideReviewForm" id="submitFormButton">Cancel</button>
+        </div>
+      </div><!-- end review form-->
+      <!--Begins more info container, triggered when user clicks "More Info" button-->
+      <div id="moreInfoContainer" data-bind="visible: showMoreInfo">
+        <button class="button" data-bind="click: hideMoreInfo" id="moreInfoCloseButton">X</button>
+        <img id="profileImage"data-bind="attr: {src: detailsImage, alt: stockImage}" >
+        <h2 data-bind="text : profileName"></h2>
+        <span data-bind="text : profileAddress"></span>
+        <ul id="hoursList" data-bind="foreach : hoursArray">
+          <li id="hour" data-bind="text: $data"></li>
+        </ul>
+        <p> Here's what some people are saying:</p>
+        <ul id="profileReviews" data-bind=" foreach : reviewsArray">
+          <li id="review" data-bind=" text: $data"></li>
+        </ul>
+      </div>
   </div>
-    <div id="moreInfoContainer" data-bind="visible: showMoreInfo">
-      <button class='button' data-bind='click: hideMoreInfo' id='moreInfoCloseButton'>X</button>
-      <img id="profileImage"data-bind="attr: {src: detailsImage, alt: stockImage}" >
-      <h2 data-bind="text : profileName"></h2>
-      <span data-bind="text : profileAddress"></span>
-      <ul id="hoursList" data-bind="foreach : hoursArray">
-        <li id="hour" data-bind="text: $data"></li>
-      </ul>
-      <p> Here's what some people are saying:</p>
-      <ul id="profileReviews" data-bind=" foreach : reviewsArray">
-        <li id="review" data-bind=" text: $data"></li>
-      </ul>
-    </div>
-  </div>
+
 	<script>
-
-  /*global arrayContainer:true, DomObjects:true */
-    //INITIALIZE MAP AND STYLING
-
-   		//create styling for map
-   		styles = [
-   		{
-   			elementType: 'geometry',
-   			stylers: [{color: '#5d6e87'}]
-   		},
-   		{
-   			elementType: 'labels.text.stroke',
-   			stylers: [{color: '#242f3e'}],
-   		},
-   		{
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#fdffb7'}]
-   		},
-   		{
-   			featureType: 'road',
-   			elementType: 'geometry',
-   			stylers: [{color: '#233044'}]
-   		},
-   		{
-   			featureType: 'poi.park',
-   			elementType: 'geometry',
-   			stylers: [{color: '#dbf4d0'}]
-   		},
-   		{
-   			featureType: 'poi.business',
-   			stylers: [{visibility: 'off'}]
-   		},
-   		{
-   			featureType: 'water',
-   			elementType: 'geometry',
-   			stylers: [{color: '#f7c5da'}]
-   		}
-   		]
-
-          // Create global user instance variables
-    var userLocation;
-    var findResult;
-    var addMarker;
-    var origin;
-    var directionsDisplay;
-    var map;
-    var addRating = null;
-    var addResult;
-    var addDetails;
-    var currentProfile;
-    var matrixResponse;
-    var closestLoc;
-    var circle;
-    var activeWindow;
-    var hours = null;
-    var moreImage;
-    var stockImage = "images/noimage.jpg";
-   		//initialize map
-   		function initMap() {
-     	  //set map in philadelphia
-     	  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.963043409283806, lng:-75.16313552856445},
-     		 zoom: 13,
-     		 disableDefaultUI: true,
-     		 styles: styles
-        });
-
-        var places = new google.maps.places.PlacesService(map);
-        var placeInfo = new google.maps.InfoWindow();
-        var directionsService = new google.maps.DirectionsService();
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        directionsDisplay.setMap(map);
-
-        viewModel.initializeMarkers();
-
-        var drawingManager = new google.maps.drawing.DrawingManager({
-          drawingMode: google.maps.drawing.OverlayType.CIRCLE,
-          drawingControl: true,
-          drawingControlOptions: {
-            position: google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: [
-            google.maps.drawing.OverlayType.CIRCLE
-            ]
-          }
-        });
-
-        drawingManager.addListener('overlaycomplete', function(event) {
-          viewModel.showEraseCircle(true);
-          viewModel.hideAllMarkers();
-          if (circle) {
-            circle.setMap(null);
-            hideListings(markers);
-          }
-          // Stop drawing mode
-          drawingManager.setDrawingMode(null);
-          circle = event.overlay;
-          circle.setEditable(true);
-          // Search within
-          viewModel.searchArea();
-          // re-check if boudries/center change
-          google.maps.event.addListener(circle, 'radius_changed', function(){
-            viewModel.searchArea();
-          });
-          google.maps.event.addListener(circle, 'center_changed', function(){
-            viewModel.searchArea();
-          });
-        });
-
-        document.getElementById('drawFiltersButton').addEventListener('click', function() {
-          setDrawingMap(drawingManager);
-        });
-
-        function setDrawingMap(drawingManager) {
-
-          if (drawingManager.map) {
-            drawingManager.setMap(null);
-          } else {
-            drawingManager.setMap(map);
-          }
-        }
-
-        //add listener to map to create pin drop at user location
-        google.maps.event.addListener(map,'click', function(event) {
-
-          directionsDisplay.setMap(null);
-
-          dropPin(event.latLng);
-
-        //drop pin in user location
-        function dropPin(location) {
-          if (circle) {
-            circle.setMap(null);
-          }
-          viewModel.hideAllPopUps();
-          viewModel.showFiltersBar(true);
-          if (placeInfo) {
-            placeInfo.close();
-          }
-          icon = 'images/youAreHere.png';
-          if (addMarker) {
-            addMarker.setVisible(false);
-          }
-          if (userLocation) {
-            userLocation.setPosition(location);
-            userLocation.setVisible(true);
-            //viewModel.findNearest(userLocation);
-          } else if (findResult) {
-            findResult = location;
-            //viewModel.findNearest(findMarker);
-          } else {
-              userLocation = new google.maps.Marker(
-              {title: "Your location",
-              position: location,
-              map: map,
-              draggable: false,
-              visible: true,
-              icon: icon
-              });
-          }
-          map.setCenter(userLocation.position);
-        }//end dropPin
-      });//end click-map event listener
-
-      //add autocomplete to finderbox
-
-      var finderInput = document.getElementById('locationBox');
-
-      var finderAutocomplete = new google.maps.places.Autocomplete(finderInput);
-
-      places = new google.maps.places.PlacesService(map);
-      finderAutocomplete.bindTo('bounds', map);
-
-      finderAutocomplete.addListener('place_changed', function(){
-        directionsDisplay.setMap(null);
-        icon = 'images/youAreHere.png';
-        findResult = finderAutocomplete.getPlace();
-        findLoc = findResult.geometry.location;
-        if (addMarker) {
-            addMarker.setVisible(false);
-          }
-        if (userLocation) {
-            userLocation.setPosition(findLoc);
-            userLocation.setVisible(true);
-            viewModel.findNearest(userLocation);
-          } else{
-        userLocation = new google.maps.Marker(
-            {
-              title: "Your Location",
-              position: findLoc,
-              map: map,
-              draggable:false,
-              visible:true,
-              icon: icon
-            });
-          map.setCenter(findLoc);
-        }
-      });//end finder autocomplete
-
-      //add autocomplete to adder box
-      var adderInput = document.getElementById('addLocationBox');
-
-      var adderAutocomplete = new google.maps.places.Autocomplete(adderInput);
-
-      adderAutocomplete.addListener('place_changed', function(){
-        directionsDisplay.setMap(null);
-        viewModel.hideAllMarkers();
-        if (userLocation) {
-          userLocation.setVisible(false);
-        }
-
-        addResult = adderAutocomplete.getPlace();
-        addLoc = addResult.geometry.location;
-        addMarker = new google.maps.Marker(
-          {title: addResult.name,
-          position: addLoc,
-          map: map,
-          draggable:false,
-          visible:true,
-            });
-          map.setCenter(addLoc);
-          addDetails = adderAutocomplete.getPlace();
-        });//end adder autocopmlete
-
-    adderAutocomplete.bindTo('bounds', map);
-    viewModel.showAllMarkers();
-
-
-  }//end of initialize map function
-
-
     ko.applyBindings(viewModel);
      </script>
   <script async defer
