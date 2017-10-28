@@ -1,3 +1,4 @@
+
 html, body { margin: 0; padding: 0; font-family: sans-serif; }
 
 ul{
@@ -15,13 +16,13 @@ li {
   font-size: 100%;
 }
 
-#map { 
+.map {
   height: 100%;
   width: 100%;
   position: absolute;
 }
 
-#toolbar { 
+.toolbar {
 	width: 94%;
   padding: 3%;
 	background-color: #233044;
@@ -31,11 +32,11 @@ li {
   display: flex;
 }
 
-  #logo {
+  .logo {
     width: 20%;
     max-height: 50%;
     position: relative;
-  }  
+  }
     h1 {
       width: 10%;
       height: 40%;
@@ -43,13 +44,13 @@ li {
       font-size: 2em;
       text-align: center;
     }
-  #userLocBox {
+  .userLocBox {
     width: 95%;
     max-height: 50%;
     position: relative;
     padding-top: 3%;
-  }  
-  #locationBox {
+  }
+  .locationBox {
     width: 75%;
     height: 40%;
     font-size: 1em;
@@ -58,7 +59,7 @@ li {
 
 /* covers Find, Add, List, and show all buttons*/
 
-#tools{
+.tools{
   background-color: #233044;
   opacity: .9;
   position: relative;
@@ -87,7 +88,7 @@ li {
 
 /* Covers Find Nearest, Draw Search area, Hide all, and List by Rating functions */
 
-#hiddenFiltersBar {
+.hiddenFiltersBar {
   width: 98%;
   height: 5%;
   background-color: #36455e;
@@ -107,7 +108,7 @@ li {
       max-height: 95%;
       width: 22%;
     }
-      #ratingsFilterContainer {
+      .ratingsFilterContainer {
         width: 30%;
         height: 65%;
         background-color: #36455e;
@@ -120,7 +121,7 @@ li {
         display: flex;
         float: right;
       }
-        #ratingsFilterList {
+        .ratingsFilterList {
           width: 80%;
           height: 94%;
           background-color: #233044;
@@ -131,7 +132,7 @@ li {
           max-height: 100%;
           overflow: auto;
         }
-        #hiddenRatingsFilter {
+        .hiddenRatingsFilter {
           width: 20%;
           height: 95%;
           background-color: #fdffb7;
@@ -148,7 +149,8 @@ li {
 
 /* Covers add location search bar and form functions  */
 
-#hiddenAddLocationBox, #hiddenMessageBar { 
+.hiddenAddLocationBox,
+.hiddenMessageBar {
   width: 96%;
   height: 3%;
   background-color: #36455e;
@@ -159,29 +161,29 @@ li {
   display: flex;
   flex-direction: row;
 }
-  #addBoxContainer {
+  .addBoxContainer {
     width: 80%;
     max-height: 65%;
     position: relative;
     padding-top: 1%;
   }
-    #addLocationBox {
+    .addLocationBox {
       width: 100%;
       height: 50%;
       font-size: 1em;
       position: relative;
     }
-  #addButtonContainer {
+  .addButtonContainer {
     position: relative;
     width: 10%;
     height: 3%;
     padding-left: 3%;
   }
-    #addButton {
+    .addButton {
       width: 100%;
       height: 3%;
     }
-  #hiddenAddForm { 
+  .hiddenAddForm {
     width: 30%;
     height: 40%;
     background-color: #233044;
@@ -195,14 +197,15 @@ li {
     padding-bottom: 3%;
     color: #fdffb7;
   }
-    #addReview, #revReview {
+    .addReview,
+    .revReview {
       width: 90%;
       height: 30%;
       display: -webkit-flex;
       display: flex;
       font-size: 20px;
     }
-    #reviewButtons{
+    .reviewButtons{
       height: 30%;
       width: 95%;
       padding-top: 8%;
@@ -220,7 +223,7 @@ li {
       padding: 3%;
       width: 100%;
     }
-#hiddenMessage{ 
+.hiddenMessage{
   width: 96%;
   height: 3%;
   position: relative;
@@ -229,7 +232,7 @@ li {
 }
 
 /* Covers List functions showing all locations*/
-#hiddenLocationsList{ 
+.hiddenLocationsList{
   width: 20%;
   height: 55%;
   background-color: #233044;
@@ -242,15 +245,15 @@ li {
   overflow: auto;
   left: 78%;
 }
-  #listItem {
+  .listItem {
     font-size: 100%;
     width: 90%;
   }
 
 
-/* Covers Location profile and rate/review form functions */ 
+/* Covers Location profile and rate/review form functions */
 
-#hiddenLocationProfile {
+.hiddenLocationProfile {
   width: 30%;
   height: 58%;
   background-color: #233044;
@@ -267,28 +270,28 @@ li {
   text-align: left;
   padding-left: 2%;
 }
-  #images {
+  .images {
     height: 40%;
     width: 90%;
     overflow: auto;
   }
-  #profileImagesContainer {
+  .profileImagesContainer {
     padding: 0;
   }
-  #flickrImages {
+  .flickrImages {
     width: 100%;
     height: auto;
   }
-  #profileInfo{
+  .profileInfo{
     height: 50%;
   }
-  #profileName {
+  .profileName {
     font-size: 200%;
   }
   h3{
     font-size: 90%;
   }
-  #wikiInfo {
+  .wikiInfo {
     padding: 2%;
     width: 90%;
     height: 30%;
@@ -300,7 +303,7 @@ li {
     font-size: 90%;
     overflow: auto;
     }
-    #wikiLinkButton {
+    .wikiLinkButton {
       text-decoration: none;
       height: 5%;
       width: 84%;
@@ -308,15 +311,17 @@ li {
       color: #233044;
       display: block;
     }
-  #profileButtonsContainer {
+  .profileButtonsContainer {
     width: 100%;
     display: block;
   }
-    #rateReviewButton, #moreInfoButton, #showDirectionsButton {
+    .rateReviewButton,
+    .moreInfoButton,
+    .showDirectionsButton {
       width: 30%;
     }
     /* Covers directions pop-up */
-      #directionsBox {
+      .directionsBox {
           padding: 2%;
           width: 90%;
           height: 50%;
@@ -326,7 +331,7 @@ li {
           float: left;
           font-size: 90%;
       }
-      #hiddenReviewForm { 
+      .hiddenReviewForm {
         width: 30%;
         height: 40%;
         background-color: #233044;
@@ -350,7 +355,7 @@ li {
           width: 20%;
           border: none;
         }
-        #hiddenSubmitFormButton {
+        .hiddenSubmitFormButton {
           width: 90%;
           max-height: 60%;
           background-color: #233044;
@@ -361,7 +366,7 @@ li {
           display: flex;
           flex-direction: row;
         }
-      #moreInfoContainer {
+      .moreInfoContainer {
         width: 50%;
         height: 65%;
         background-color: #233044;
@@ -378,10 +383,10 @@ li {
         color: #fdffb7;
         overflow: auto;
       }
-        #profileImage {
+        .profileImage {
           max-width: 90%;
         }
-        #hoursList{
+        .hoursList{
           padding-bottom: 2%;
           width: 90%;
           height: 40%;
@@ -392,12 +397,13 @@ li {
           text-align: center;
 
         }
-          #hour {
+          .hour {
             background-color: #3a4659;
             font-size: 70%;
             max-height: 95%;
           }
-        #profileReviews, #review{ 
+        .profileReviews,
+        .review{
           width: 90%;
           height: 30%;
           background-color: #36455e;
@@ -410,7 +416,7 @@ li {
 
 
 
-/* Covers all bar buttons */ 
+/* Covers all bar buttons */
 
 .barButton{
   background-color: #36455e;
@@ -427,7 +433,11 @@ li {
 
 /* Covers all close buttons */
 
-#findCloseButton, #listCloseButton, #profileCloseButton, #moreInfoCloseButton, #hideDirectionsBut {
+.findCloseButton,
+.listCloseButton,
+.profileCloseButton,
+.moreInfoCloseButton,
+.hideDirectionsBut {
   height: 5%;
   width: 90%;
   padding-top: 2%;
@@ -441,3 +451,6 @@ li {
   display: block;
 }
 
+@media screen and (max-width: 700px) {
+
+}
