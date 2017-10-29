@@ -292,6 +292,9 @@ var viewModel = {
   profileRating : ko.observable(),
   reviewsArray : ko.observableArray(),
   flickrPhotosArray : ko.observableArray(),
+  restroomsFilterArray : ko.observableArray(),
+  filterButtonRating : ko.observable(5),
+
 
   displayFindBox: function(){
     this.hideAllPopUps();
@@ -381,48 +384,29 @@ var viewModel = {
   },
 
   showByRating : function(rating) {
+    this.filterButtonRating(rating);
     //remove open circles/directions
     directionsDisplay.setMap(null);
     if (circle) {
       circle.setMap(null);
     }
-    //choose ratings list div and set  it to blank
-    var list = document.getElementById("ratingsFilterList");
-    list.innerHTML = "";
-    //iterate over restrooms and set locations
+    list = [];
     for (i = 0; i < model.restRooms.length; i += 1) {
       //comapre average rating of locatino to rating choice
       if (model.restRooms[i].avgRating >= rating) {
         //set marker visibilty of location to true if location ranks at or higher than rating
-        viewModel.findMarker(model.restRooms[i].id).setVisible(true);
-        //add loction name to list if ranking it at or higer than chosen rating
-        idnum = model.restRooms[i].id;
-        btn = document.createElement("BUTTON");
-        txt = document.createTextNode(model.restRooms[i].title);
-        btn.appendChild(txt);
-        btn.setAttribute("id", idnum);
-        btn.setAttribute("style", "width: 100%; background-color: #233044; color: #fdffb7; font-size: 20px; border: none; padding: 3%;");
-        list.appendChild(btn);
-        viewModel.addListListeners(idnum);
+        ratedMark = viewModel.findMarker(model.restRooms[i].id);
+        ratedMark.setVisible(true);
+        list.push(model.restRooms[i]);
       } else {
         //set visibility to false if rating is below chasen rating
         viewModel.findMarker(model.restRooms[i].id).setVisible(false);
         }
-      if (list.innerHTML === '') {
-        list.innerHTML = "No locations currently have that rating";
-      }
     }
-    //set source of elements with id values less than chose rating to clearBrush,
-    // and at ot highger than rating to black Brush
-    document.getElementById(rating).src = "images/blackBrush.png";
-    for (i = 5; i >= 1; i --) {
-      elem = document.getElementById(i);
-      if (elem.id >= rating) {
-        elem.src = "images/blackBrush.png";
-      } else {
-        elem.src = "images/clearBrush.png";
-      }
+    if (list.length === 0) {
+      list.push({title: "No locations match that rating"});
     }
+    this.restroomsFilterArray(list);
   },
 
   listLocations : function() {
