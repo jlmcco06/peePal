@@ -294,6 +294,8 @@ var viewModel = {
   flickrPhotosArray : ko.observableArray(),
   restroomsFilterArray : ko.observableArray(),
   filterButtonRating : ko.observable(5),
+  revReview : ko.observable(),
+  addReview : ko.observable(),
 
 
   displayFindBox: function(){
@@ -450,13 +452,6 @@ var viewModel = {
   },
 
   displayReviewForm: function() {
-    var box = document.getElementById("addPlaceInfo");
-    var title = document.createElement("h1");
-    title.setAttribute("style", "color: #fdffb7;");
-    title.innerHTML = currentProfile.title;
-    box.appendChild(title);
-    console.log(title);
-    console.log(document.getElementById("hiddenReviewForm"));
     this.showReviewForm(true);
   },
 
@@ -464,7 +459,7 @@ var viewModel = {
     if (addRating) {
       var match = this.findRestroom(addResult.id);
       if (match === null) {
-        var reviewDraft = document.getElementById("addReview").value;
+        var reviewDraft = viewModel.addReview();
         var rating = addRating;
         var newRestroom = {
           title: addResult.name,
@@ -505,12 +500,10 @@ var viewModel = {
       this.showAddForm(false);
       this.showHiddenMessage("Nope", "Sorry, something went wrong");
     } else {
-      reviewDraft =  document.getElementById("revReview").value;
+      reviewDraft = viewModel.revReview();
       prof.reviews.push(reviewDraft);
       prof.rating.push(addRating);
       prof.rating.push(rating);
-      console.log(prof.rating);
-      console.log(prof);
       this.showSubmitForm(false);
       this.showAddForm(false);
       this.showHiddenMessage("OK", "Your review has been added to" + prof.title);
@@ -712,7 +705,8 @@ var viewModel = {
         url: url,
         dataType: 'json',
         success: function(result) {
-          if (result[2][0].length > 0) {
+          console.log(result);
+          if (result[2][0]) {
             viewModel.profileWiki(result[2][0]);
             viewModel.wikiLink(result[3][0]);
           } else {

@@ -80,8 +80,7 @@
     </div><!--end ratings filter container-->
     <!--Add location form which is displayed when user clicks "add" button in add location section-->
     <div class="hiddenAddForm" id="hiddenReviewForm" data-bind="visible: showAddForm">
-        <div class="addPlaceInfo" id="addPlaceInfo"></div>
-        <textarea class="reviewBox" id="addReview" placeholder="Write a review of this restroom here!"></textarea>
+        <textarea class="reviewBox" data-bind="textInput: addReview" placeholder="Enter your review of this location here"></textarea>
         <div class="reviewButtons" id="reviewButtons">
           <button id="gross" data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
           <button id="kindaGross" data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
@@ -141,7 +140,7 @@
     <!--Beginning of review form container, triggered when a user clicks the "Review" button on the location proflie-->
       <div class="hiddenReviewForm" id="hiddenReviewForm" data-bind="visible: showReviewForm">
         <br>
-        <textarea class="reviewBox" id="revReview" placeholder="Write a review of this restroom here!"></textarea>
+        <textarea class="reviewBox" id="revReview" data-bind="textInput: revReview" placeholder="Enter your review of this location here"></textarea>
         <div class="reviewButtons">
           <button data-bind="click : setAddRating.bind($data, '1')" class="reviewbutton">Gross!</button>
           <button data-bind="click : setAddRating.bind($data, '2')" class="reviewbutton">Kinda gross</button>
