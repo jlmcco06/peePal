@@ -236,6 +236,7 @@ var viewModel = {
       viewModel.addWindowInfo(this, placeInfo);
       viewModel.displayLocationProfile(this.id);
       this.setAnimation(google.maps.Animation.BOUNCE);
+      map.panTo(this.getPosition());
     });
   },
 
@@ -670,6 +671,7 @@ var viewModel = {
     }
     marker = this.findMarker(id);
     marker.setAnimation(google.maps.Animation.BOUNCE);
+    map.panTo(marker.getPosition());
   },
 
   findRestroom : function(id) {
