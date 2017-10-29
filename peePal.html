@@ -58,26 +58,23 @@
     <div class="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
       <div class="ratingsFilterList" id="ratingsFilterList">
         <!--Location list of places with chosen user rating or-->
-        <div class="ratingsFilterList" data-bind="visible: showLocationsList">
-          <button class="listCloseButton" data-bind="click: hideList">X</button>
+          <button class="ratingsListCloseButton" data-bind="click: hideList">X</button>
           <br>
-          <ul class="restroomList" data-bind="foreach : restroomsArray">
+          <ul class="restroomFilterList" data-bind="foreach : restroomsFilterArray">
             <li>
-              <button class="listItem" data-bind="event : { click: $parent.getProfile }">
+              <button class="filterListItem" data-bind="event : { click: $parent.getProfile }">
                 <span class="listItemName" data-bind="text: title"></span>
               </button>
             </li>
           </ul>
       </div><!--end of ratings filter list-->
-
-      </div>
       <div class="hiddenRatingsFilter">
         Clean
-        <img id="5" src="images/blackBrush.png" alt="Clean" data-bind="click : showByRating.bind($data, '5')">
-        <img id="4" src="images/blackBrush.png" alt="Kinda Clean" data-bind="click : showByRating.bind($data, '4')">
-        <img id="3" src="images/blackBrush.png" alt="Fine" data-bind="click : showByRating.bind($data, '3')">
-        <img id="2" src="images/blackBrush.png" alt="Kinda Gross" data-bind="click : showByRating.bind($data, '2')">
-        <img id="1" src="images/blackBrush.png" alt="Gross" data-bind="click : showByRating.bind($data, '1')">
+        <img id="5" data-bind="attr: {src : (filterButtonRating <= '5') ? 'images/clearBrush.png' : 'images/blackBrush.png'}, click : showByRating.bind($data, '5')">
+        <img id="4" data-bind="attr: {src : (filterButtonRating <= '4') ? 'images/clearBrush.png' : 'images/blackBrush.png'}, click : showByRating.bind($data, '4')">
+        <img id="3" data-bind="attr : {src : (filterButtonRating <= '3') ? 'images/clearBrush.png' : 'images/blackBrush.png'}, click : showByRating.bind($data, '3')">
+        <img id="2" data-bind="attr : {src : (filterButtonRating <= '2') ? 'images/clearBrush.png' : 'images/blackBrush.png'}, click : showByRating.bind($data, '2')">
+        <img id="1" data-bind="attr: {src : (filterButtonRating <= '1') ? 'images/clearBrush.png' : 'images/blackBrush.png'}, click : showByRating.bind($data, '1')">
         Gross
       </div>
     </div><!--end ratings filter container-->
@@ -112,6 +109,7 @@
     <!--Location profile displayed when user clicks location icon on the map, or any button showing the name of the location-->
     <div class="hiddenLocationProfile" id="hiddenLocationProfile" data-bind="visible: showLocationProfile">
       <button class="button" data-bind="click: hideProfile" id="profileCloseButton">X</button>
+      <div class="profileName" data-bind="text: profileName"></div>
       <br>
       Images from Flickr
       <div class="images">
@@ -120,7 +118,6 @@
         </ul>
       </div>
       <div class="profileInfo">
-        <div class="profileName" data-bind="text: profileName"></div>
         <br>
         <div class="profileRating" data-bind="text: profileRating"></div>
         <br>
