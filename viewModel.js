@@ -3,212 +3,28 @@
 //INITIALIZE MAP
 
 // Create global user instance variables
-var userLocation = null;
-var findResult = null;
-var addMarker = null;
-var origin = null;
+var userLocation;
+var findResult;
+var addMarker;
+var origin;
+var drawingManager;
 var directionsDisplay;
+var directionsService;
+var placeInfo;
+var places;
 var map;
-var addRating = null;
-var addResult = null;
-var addDetails = null;
-var currentProfile = null;
-var matrixResponse = null;
-var closestLoc = null;
-var circle = null;
-var activeWindow = null;
-var hours = null;
-var moreImage = null;
+var addRating;
+var addResult;
+var addDetails;
+var currentProfile;
+var matrixResponse;
+var closestLoc;
+var circle;
+var activeWindow;
+var hours;
+var moreImage;
 var stockImage = "images/noimage.jpg";
 
-//initialize map
-function initMap() {
-  //create styling for map
-  var styles = [
-    {
-      elementType: 'geometry',
-      stylers: [{color: '#5d6e87'}]},
-    {
-      elementType: 'labels.text.stroke',
-      stylers: [{color: '#242f3e'}],
-    },
-    {
-      elementType: 'labels.text.fill',
-      stylers: [{color: '#fdffb7'}]
-    },
-    {
-      featureType: 'road',
-      elementType: 'geometry',
-      stylers: [{color: '#233044'}]
-    },
-    {
-      featureType: 'poi.park',
-      elementType: 'geometry',
-      stylers: [{color: '#dbf4d0'}]
-    },
-    {
-      featureType: 'poi.business',
-      stylers: [{visibility: 'off'}]
-    },
-    {
-      featureType: 'water',
-      elementType: 'geometry',
-      stylers: [{color: '#f7c5da'}]
-    }]
-
-  //set map in philadelphia
-  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.963043409283806, lng:-75.16313552856445},
-    zoom: 13,
-    disableDefaultUI: true,
-    styles: styles
-  });
-
-  var places = new google.maps.places.PlacesService(map);
-  var placeInfo = new google.maps.InfoWindow();
-  var directionsService = new google.maps.DirectionsService();
-  directionsDisplay = new google.maps.DirectionsRenderer();
-  var drawingManager = new google.maps.drawing.DrawingManager({
-    drawingMode: google.maps.drawing.OverlayType.CIRCLE,
-    drawingControl: true,
-    drawingControlOptions: {
-    position: google.maps.ControlPosition.TOP_CENTER,
-    drawingModes: [
-    google.maps.drawing.OverlayType.CIRCLE]}
-  });
-
-  drawingManager.addListener('overlaycomplete', function(event) {
-    viewModel.showEraseCircle(true);
-    viewModel.hideAllMarkers();
-    if (circle) {
-      circle.setMap(null);
-      hideListings(markers);
-    }
-    // Stop drawing mode
-    drawingManager.setDrawingMode(null);
-    circle = event.overlay;
-    circle.setEditable(true);
-    // Search within
-    viewModel.searchArea();
-    // re-check if boudries/center change
-    google.maps.event.addListener(circle, 'radius_changed', function(){
-      viewModel.searchArea();
-    });
-    google.maps.event.addListener(circle, 'center_changed', function(){
-      viewModel.searchArea();
-    });
-  });
-
-  document.getElementById('drawFiltersButton').addEventListener('click', function() {
-    setDrawingMap(drawingManager);
-  });
-
-  function setDrawingMap() {
-    if (drawingManager.map) {
-      drawingManager.setMap(null);
-    } else {
-      drawingManager.setMap(map);
-    }
-  }
-
-  //add listener to map to create pin drop at user location
-  google.maps.event.addListener(map,'click', function(event) {
-    dropPin(event.latLng);
-
-    //drop pin in user location
-    function dropPin(location) {
-      if (circle) {
-        circle.setMap(null);
-      }
-      viewModel.hideAllPopUps();
-      viewModel.showFiltersBar(true);
-      if (placeInfo) {
-        placeInfo.close();
-      }
-      icon = 'images/youAreHere.png';
-      if (addMarker) {
-        addMarker.setVisible(false);
-      }
-      if (userLocation) {
-        userLocation.setPosition(location);
-        userLocation.setVisible(true);
-      } else if (findResult) {
-        findResult = location;
-      } else {
-        userLocation = new google.maps.Marker(
-          {title: "Your location",
-          position: location,
-          map: map,
-          draggable: false,
-          visible: true,
-          icon: icon
-        });
-      }
-      map.setCenter(userLocation.position);
-    }//end dropPin
-  });//end click-map event listener
-
-  //add autocomplete to finderbox
-
-  var finderInput = document.getElementById('locationBox');
-
-  var finderAutocomplete = new google.maps.places.Autocomplete(finderInput);
-
-  finderAutocomplete.bindTo('bounds', map);
-
-  finderAutocomplete.addListener('place_changed', function(){
-    directionsDisplay.setMap(null);
-    icon = 'images/youAreHere.png';
-    findResult = finderAutocomplete.getPlace();
-    findLoc = findResult.geometry.location;
-    if (addMarker) {
-      addMarker.setVisible(false);
-    }
-    if (userLocation) {
-      userLocation.setPosition(findLoc);
-      userLocation.setVisible(true);
-      viewModel.findNearest(userLocation);
-    } else {
-      userLocation = new google.maps.Marker(
-      {
-        title: "Your Location",
-        position: findLoc,
-        map: map,
-        draggable:false,
-        visible:true,
-        icon: icon
-      });
-      map.setCenter(findLoc);
-    }
-  });//end finder autocomplete
-
-  //add autocomplete to adder box
-  var adderInput = document.getElementById('addLocationBox');
-  var adderAutocomplete = new google.maps.places.Autocomplete(adderInput);
-
-  adderAutocomplete.addListener('place_changed', function(){
-    directionsDisplay.setMap(null);
-    viewModel.hideAllMarkers();
-    if (userLocation) {
-      userLocation.setVisible(false);
-    }
-    addResult = adderAutocomplete.getPlace();
-    addLoc = addResult.geometry.location;
-    addMarker = new google.maps.Marker(
-      {title: addResult.name,
-      position: addLoc,
-      map: map,
-      draggable:false,
-      visible:true,
-      });
-    map.setCenter(addLoc);
-    addDetails = adderAutocomplete.getPlace();
-  });//end adder autocopmlete
-
-  adderAutocomplete.bindTo('bounds', map);
-  directionsDisplay.setMap(map);
-  viewModel.initializeMarkers();
-  viewModel.showAllMarkers();
-}//end of initialize map function
 
 var viewModel = {
 	//creates marker insatnce from restRooms array
@@ -423,7 +239,6 @@ var viewModel = {
   },
 
   addWindowInfo : function (marker, placeInfo){
-    placeInfo = new google.maps.InfoWindow();
     if (activeWindow) {
       activeWindow.close();
     }
@@ -657,16 +472,16 @@ var viewModel = {
     this.hideAllMarkers();
     this.hideAllPopUps();
     this.showFiltersBar(true);
-    drawingManager = new google.maps.drawing.DrawingManager({
-      drawingMode: google.maps.drawing.OverlayType.CIRCLE,
-      drawingControl: true,
-      drawingControlOptions: {
-        position: google.maps.ControlPosition.TOP_CENTER,
-        drawingModes: [
-          google.maps.drawing.OverlayType.CIRCLE
-        ]
+    setDrawingMap(drawingManager);
+
+    function setDrawingMap() {
+      if (drawingManager.map) {
+        drawingManager.setMap(null);
+      } else {
+        drawingManager.setMap(map);
       }
-    });
+    }
+
   },
 
   searchArea : function() {
@@ -689,12 +504,11 @@ var viewModel = {
         url: url,
         dataType: 'json',
         success: function(result) {
-          console.log(result);
           if (result[2][0]) {
             viewModel.profileWiki(result[2][0]);
             viewModel.wikiLink(result[3][0]);
           } else {
-            viewModel.profileWiki("No summary information is availble for this location. You may click the button below to check WikiPedia page.");
+            viewModel.profileWiki("No summary information is availble for this location.");
             viewModel.wikiLink(result[3][0]);
           }
         },
@@ -728,8 +542,9 @@ var viewModel = {
           viewModel.flickrPhotosArray([stockImage]);
         }
       },
-      error: function(result) {
-        console.log(result);
+      error: function(response) {
+        viewModel.flickrPhotosArray(["Flickr servers were unable to complete this request, due to an '" +
+        response.message + "' error. 'code': " + response.code + ", 'stat': " + response.stat]);
       }
     });
   },
@@ -763,3 +578,180 @@ var viewModel = {
     hours = null;
   }
 };
+
+//initialize map
+function initMap() {
+  //create styling for map
+  styles = [
+    {
+      elementType: 'geometry',
+      stylers: [{color: '#5d6e87'}]},
+    {
+      elementType: 'labels.text.stroke',
+      stylers: [{color: '#242f3e'}],
+    },
+    {
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#fdffb7'}]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{color: '#233044'}]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{color: '#dbf4d0'}]
+    },
+    {
+      featureType: 'poi.business',
+      stylers: [{visibility: 'off'}]
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{color: '#f7c5da'}]
+    }]
+
+  //set map in philadelphia
+  map = new google.maps.Map(document.getElementById('map'), {center: {lat: 39.963043409283806, lng:-75.16313552856445},
+    zoom: 13,
+    disableDefaultUI: true,
+    styles: styles
+  });
+
+  places = new google.maps.places.PlacesService(map);
+  placeInfo = new google.maps.InfoWindow();
+  directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.CIRCLE,
+    drawingControl: true,
+    drawingControlOptions: {
+    position: google.maps.ControlPosition.TOP_CENTER,
+    drawingModes: [
+    google.maps.drawing.OverlayType.CIRCLE]}
+  });
+
+  drawingManager.addListener('overlaycomplete', function(event) {
+    viewModel.showEraseCircle(true);
+    viewModel.hideAllMarkers();
+    if (circle) {
+      circle.setMap(null);
+      hideListings(markers);
+    }
+    // Stop drawing mode
+    drawingManager.setDrawingMode(null);
+    circle = event.overlay;
+    circle.setEditable(true);
+    // Search within
+    viewModel.searchArea();
+    // re-check if boudries/center change
+    google.maps.event.addListener(circle, 'radius_changed', function(){
+      viewModel.searchArea();
+    });
+    google.maps.event.addListener(circle, 'center_changed', function(){
+      viewModel.searchArea();
+    });
+  });
+
+  //add listener to map to create pin drop at user location
+  google.maps.event.addListener(map,'click', function(event) {
+    dropPin(event.latLng);
+
+    //drop pin in user location
+    function dropPin(location) {
+      if (circle) {
+        circle.setMap(null);
+      }
+      viewModel.hideAllPopUps();
+      viewModel.showFiltersBar(true);
+      if (placeInfo) {
+        placeInfo.close();
+      }
+      icon = 'images/youAreHere.png';
+      if (addMarker) {
+        addMarker.setVisible(false);
+      }
+      if (userLocation) {
+        userLocation.setPosition(location);
+        userLocation.setVisible(true);
+      } else if (findResult) {
+        findResult = location;
+      } else {
+        userLocation = new google.maps.Marker(
+          {title: "Your location",
+          position: location,
+          map: map,
+          draggable: false,
+          visible: true,
+          icon: icon
+        });
+      }
+      map.setCenter(userLocation.position);
+    }//end dropPin
+  });//end click-map event listener
+
+  //add autocomplete to finderbox
+
+  var finderInput = document.getElementById('locationBox');
+
+  var finderAutocomplete = new google.maps.places.Autocomplete(finderInput);
+
+  finderAutocomplete.bindTo('bounds', map);
+
+  finderAutocomplete.addListener('place_changed', function(){
+    directionsDisplay.setMap(null);
+    icon = 'images/youAreHere.png';
+    findResult = finderAutocomplete.getPlace();
+    findLoc = findResult.geometry.location;
+    if (addMarker) {
+      addMarker.setVisible(false);
+    }
+    if (userLocation) {
+      userLocation.setPosition(findLoc);
+      userLocation.setVisible(true);
+      viewModel.findNearest(userLocation);
+    } else {
+      userLocation = new google.maps.Marker(
+      {
+        title: "Your Location",
+        position: findLoc,
+        map: map,
+        draggable:false,
+        visible:true,
+        icon: icon
+      });
+      map.setCenter(findLoc);
+    }
+  });//end finder autocomplete
+
+  //add autocomplete to adder box
+  var adderInput = document.getElementById('addLocationBox');
+  var adderAutocomplete = new google.maps.places.Autocomplete(adderInput);
+
+  adderAutocomplete.addListener('place_changed', function(){
+    directionsDisplay.setMap(null);
+    viewModel.hideAllMarkers();
+    if (userLocation) {
+      userLocation.setVisible(false);
+    }
+    addResult = adderAutocomplete.getPlace();
+    addLoc = addResult.geometry.location;
+    addMarker = new google.maps.Marker(
+      {title: addResult.name,
+      position: addLoc,
+      map: map,
+      draggable:false,
+      visible:true,
+      });
+    map.setCenter(addLoc);
+    addDetails = adderAutocomplete.getPlace();
+  });//end adder autocopmlete
+
+  adderAutocomplete.bindTo('bounds', map);
+  directionsDisplay.setMap(map);
+  viewModel.initializeMarkers();
+  viewModel.showAllMarkers();
+}//end of initialize map function
