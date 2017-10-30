@@ -272,7 +272,8 @@ var viewModel = {
   showAddBox: ko.observable(false),
   showAddForm: ko.observable(false),
   showLocationsList: ko.observable(false),
-  showAddedMessage: ko.observable(false),
+  showSuccessMessage: ko.observable(false),
+  showErrorMessage : ko.observable(false),
   showLocationProfile: ko.observable(false),
   showReviewForm: ko.observable(false),
   showDirections: ko.observable(false),
@@ -288,6 +289,7 @@ var viewModel = {
   detailsImage : ko.observable(),
   wikiLink : ko.observable(),
   showMessage : ko.observable(),
+  errorMessage : ko.observable(),
   restroomsArray : ko.observableArray(),
   profileRating : ko.observable(),
   reviewsArray : ko.observableArray(),
@@ -320,7 +322,8 @@ var viewModel = {
     viewModel.showAddForm(false);
     viewModel.showSubmitForm(false);
     viewModel.showLocationsList(false);
-    viewModel.showAddedMessage(false);
+    viewModel.showSuccessMessage(false);
+    viewModel.showErrorMessage(false);
     viewModel.showReviewForm(false);
     viewModel.showDirections(false);
     viewModel.showFiltersBar(false);
@@ -549,17 +552,6 @@ var viewModel = {
     viewModel.displayLocationProfile(location.id);
   },
 
-  addListListeners: function(id) {
-    btn = document.getElementById(id);
-    btn.addEventListener('click', function(){
-      viewModel.hideAllMarkers();
-      viewModel.displayLocationProfile(id);
-      mark = viewModel.findMarker(id);
-      map.setCenter(mark.position);
-      mark.setVisible(true);
-    });
-  },
-
   hideList : function() {
     this.showLocationsList(false);
   },
@@ -576,22 +568,20 @@ var viewModel = {
   },
 
   showHiddenMessage: function(response, message) {
-    bar = document.getElementById("hiddenMessageBar");
     if (response === 'OK') {
-      bar.style = "padding-top: 2%; background-color: #5d993b; color: #dbe5d5; width: 100%; height: 5%; float: center; position: relative; opacity: .9; text-align: center;";
       this.showMessage(message);
-      this.showAddedMessage(true);
+      this.showSuccessMessage(true);
       setTimeout(viewModel.hideAllPopUps, 2000);
     } else {
-      bar.style = "padding-top: 2%; background-color: #d84520; color: #dbe5d5; width: 100%; height: 5%; float: center; position: relative; opacity: .9; text-align: center;";
-      this.showMessage(message);
-      this.showAddedMessage(true);
+      this.errorMessage(message);
+      this.showErrorMessage(true);
       setTimeout(viewModel.hideHiddenMessage, 3000);
       }
   },
 
   hideHiddenMessage: function() {
-    viewModel.showAddedMessage(false);
+    viewModel.showSuccessMessage(false);
+    viewModel.showErrorMessage(false);
   },
 
   hideReviewForm : function() {
