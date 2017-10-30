@@ -5,11 +5,7 @@
   <title>PeePal</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="knockout-3.4.2.js"></script>
   <link rel="stylesheet" href="style.css">
-  <script src="model.js"></script>
-  <script src="viewmodel.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -172,12 +168,14 @@
         </ul>
       </div>
   </div>
-
-	<script>
-    ko.applyBindings(viewModel);
-     </script>
+  <script src="knockout-3.4.2.js"></script>
+  <script src="model.js"></script>
+  <script src="viewmodel.js"></script>
+   <script>ko.applyBindings(viewModel);</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script async defer
-     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&callback=initMap&libraries=places,drawing,geometry"></script>
+     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCX8Zi0hHtFLV-g-yLo9QBOfFo3j_dNWsE&v=3&callback=initMap&libraries=places,drawing,geometry" onerror="viewModel.showHiddenMessage('Nope','there was an error loading your map')">
+     </script>
 </body>
 </html>
 
