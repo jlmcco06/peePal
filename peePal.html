@@ -51,8 +51,11 @@
       </div>
     </div><!--end Add Location bar-->
     <!--Adding bar to display inner site error messages-->
-    <div class="hiddenMessageBar" id="hiddenMessageBar" data-bind="visible: showAddedMessage">
+    <div class="hiddenSuccessMessageBar" id="hiddenSuccessMessageBar" data-bind="visible: showSuccessMessage">
       <div class="hiddenMessage" data-bind="text : showMessage"></div>
+    </div>
+    <div class="hiddenErrorMessageBar" id="hiddenErrorMessageBar" data-bind="visible: showErrorMessage">
+      <div class="hiddenMessage" data-bind="text : errorMessage"></div>
     </div><!-- end of message bar-->
     <!--Ratings filter container for toilet brush images-->
     <div class="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
