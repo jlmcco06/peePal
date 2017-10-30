@@ -155,8 +155,7 @@ li {
 
 /* Covers add location search bar and form functions  */
 
-.hiddenAddLocationBox,
-.hiddenMessageBar {
+.hiddenAddLocationBox {
   width: 96%;
   height: 3%;
   background-color: #36455e;
@@ -229,6 +228,34 @@ li {
       padding: 3%;
       width: 100%;
     }
+
+/*covers hidden message bars*/
+.hiddenSuccessMessageBar {
+  width: 96%;
+  height: 3%;
+  padding-top: 2%;
+  background-color: #5d993b;
+  color: #dbe5d5;
+  width: 100%;
+  height: 5%;
+  float: center;
+  position: relative;
+  opacity: .9;
+  text-align: center;
+}
+.hiddenErrorMessageBar {
+  width: 96%;
+  height: 3%;
+  padding-top: 2%;
+  background-color: #d84520;
+  color: #dbe5d5;
+  width: 100%;
+  height: 5%;
+  float: center;
+  position: relative;
+  opacity: .9;
+  text-align: center;
+}
 .hiddenMessage{
   width: 96%;
   height: 3%;
