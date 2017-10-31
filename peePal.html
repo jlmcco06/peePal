@@ -58,11 +58,11 @@
     <div class="ratingsFilterContainer" data-bind="visible: showRatingsFilter">
       <div class="ratingsFilterList" id="ratingsFilterList">
         <!--Location list of places with chosen user rating or-->
-          <button class="ratingsListCloseButton" data-bind="click: hideList">X</button>
+          <button class="ratingsListCloseButton" data-bind="click: hideRatingsList">X</button>
           <br>
           <ul class="restroomFilterList" data-bind="foreach : restroomsFilterArray">
             <li>
-              <button class="filterListItem" data-bind="event : { click: $parent.getProfile }">
+              <button class="button" data-bind="event : { click: $parent.getProfile }">
                 <span class="listItemName" data-bind="text: title"></span>
               </button>
             </li>
