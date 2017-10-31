@@ -372,6 +372,10 @@ var viewModel = {
     this.showLocationsList(false);
   },
 
+  hideRatingsList : function() {
+    this.showRatingsFilter(false);
+  },
+
   hideProfile : function() {
     this.showLocationProfile(false);
   },
